@@ -10,7 +10,6 @@ public class ItemCookedBerry extends AbstractItem {
      * @param amount az item mennyisége
      */
     public ItemCookedBerry(int amount) {
-        super(ItemType.COOKED_BERRY, amount, 10);
+        super(ItemType.COOKED_BERRY, amount);
     }
-
 }

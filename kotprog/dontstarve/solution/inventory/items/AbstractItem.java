@@ -14,7 +14,6 @@ public abstract class AbstractItem {
      * Az item mennyisége.
      */
     private int amount;
-    private int maxAmount;
 
     /**
      * Konstruktor, amellyel a tárgy létrehozható.
@@ -24,13 +23,6 @@ public abstract class AbstractItem {
     public AbstractItem(ItemType type, int amount) {
         this.type = type;
         this.amount = amount;
-        this.maxAmount = 1;
-    }
-
-    public AbstractItem(ItemType type, int amount, int maxAmount) {
-        this.type = type;
-        this.amount = amount;
-        this.maxAmount = maxAmount;
     }
 
     /**
@@ -48,12 +40,24 @@ public abstract class AbstractItem {
     public int getAmount() {
         return amount;
     }
-
     public void setAmount(int amount) {
         this.amount = amount;
     }
 
     public int getMaxAmount() {
-        return maxAmount;
+        switch (this.type) {
+            case LOG -> {
+                return 15;
+            }
+            case STONE, RAW_CARROT, COOKED_CARROT, RAW_BERRY, COOKED_BERRY -> {
+                return 10;
+            }
+            case TWIG -> {
+                return 20;
+            }
+            default -> {
+                return 1;
+            }
+        }
     }
 }

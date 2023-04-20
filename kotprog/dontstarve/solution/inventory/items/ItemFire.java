@@ -10,5 +10,4 @@ public class ItemFire extends AbstractItem {
     public ItemFire() {
         super(ItemType.FIRE, 1);
     }
-
 }

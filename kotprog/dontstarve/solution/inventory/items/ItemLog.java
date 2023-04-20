@@ -1,7 +1,5 @@
 package prog1.kotprog.dontstarve.solution.inventory.items;
 
-import java.lang.reflect.Type;
-
 /**
  * A fa item leírására szolgáló osztály.
  */
@@ -11,9 +9,7 @@ public class ItemLog extends AbstractItem {
      *
      * @param amount az item mennyisége
      */
-
     public ItemLog(int amount) {
-        super(ItemType.LOG, amount, 15);
+        super(ItemType.LOG, amount);
     }
-
 }

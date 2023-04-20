@@ -10,7 +10,6 @@ public class ItemRawCarrot extends AbstractItem {
      * @param amount az item mennyisége
      */
     public ItemRawCarrot(int amount) {
-        super(ItemType.RAW_CARROT, amount, 10);
+        super(ItemType.RAW_CARROT, amount);
     }
-
 }

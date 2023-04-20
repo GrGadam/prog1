@@ -10,7 +10,6 @@ public class ItemCookedCarrot extends AbstractItem {
      * @param amount az item mennyisége
      */
     public ItemCookedCarrot(int amount) {
-        super(ItemType.COOKED_CARROT, amount, 10);
+        super(ItemType.COOKED_CARROT, amount);
     }
-
 }

@@ -10,7 +10,6 @@ public class ItemTwig extends AbstractItem {
      * @param amount az item mennyisége
      */
     public ItemTwig(int amount) {
-        super(ItemType.TWIG, amount, 20);
+        super(ItemType.TWIG, amount);
     }
-
 }

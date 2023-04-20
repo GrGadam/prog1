@@ -10,7 +10,6 @@ public class ItemRawBerry extends AbstractItem {
      * @param amount az item mennyisége
      */
     public ItemRawBerry(int amount) {
-        super(ItemType.RAW_BERRY, amount, 10);
+        super(ItemType.RAW_BERRY, amount);
     }
-
 }

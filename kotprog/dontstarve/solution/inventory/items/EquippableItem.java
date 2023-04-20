@@ -11,9 +11,6 @@ public abstract class EquippableItem extends AbstractItem {
      *
      * @param type   az item típusa
      */
-
-    private float percentage;
-
     public EquippableItem(ItemType type) {
         super(type, 1);
     }
@@ -23,10 +20,6 @@ public abstract class EquippableItem extends AbstractItem {
      * @return a tárgy használatlansága, %-ban (100%: tökéletes állapot)
      */
     public float percentage() {
-        return this.percentage;
-    }
-
-    public void setPercentage(float percentage) {
-        this.percentage = percentage;
+        throw new NotImplementedException();
     }
 }

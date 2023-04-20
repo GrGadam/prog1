@@ -4,14 +4,26 @@ import prog1.kotprog.dontstarve.solution.inventory.items.AbstractItem;
 import prog1.kotprog.dontstarve.solution.inventory.items.EquippableItem;
 import prog1.kotprog.dontstarve.solution.inventory.items.ItemType;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 public class Inventory implements BaseInventory {
 
-    private List<AbstractItem> inventory = new ArrayList<>(10);
-    private int equippedItem;
 
+    private AbstractItem[] inventory = new AbstractItem[10];
+    //private List<AbstractItem> inventory = new ArrayList<>(10);
+    private EquippableItem equippedItem = null;
+
+    private final ItemType[] stackable = {ItemType.LOG, ItemType.STONE, ItemType.TWIG, ItemType.RAW_CARROT, ItemType.COOKED_CARROT, ItemType.RAW_BERRY, ItemType.COOKED_BERRY};
+
+    @Override
+    public boolean addItem(AbstractItem item) {
+
+
+        return false;
+    }
+
+
+    /*
     @Override
     public boolean addItem(AbstractItem item) {
 
@@ -55,6 +67,7 @@ public class Inventory implements BaseInventory {
 
         return false;
     }
+     */
 
     @Override
     public AbstractItem dropItem(int index) {
@@ -63,26 +76,92 @@ public class Inventory implements BaseInventory {
 
     @Override
     public boolean removeItem(ItemType type, int amount) {
+        int elerhetoMennyiseg = 0;
+        for (AbstractItem item : inventory) {
+            if (item.getType().equals(type)) {
+                elerhetoMennyiseg += item.getAmount();
+            }
+        }
+
+        if (elerhetoMennyiseg >= amount) {
+            int i = 0;
+            for (AbstractItem item : inventory) {
+                if (amount > 0) {
+                    if (item.getType().equals(type)) {
+                        if (item.getAmount() <= amount) {
+                            amount -= item.getMaxAmount();
+                            inventory[i] = null;
+                        }
+                    }
+                }
+                i++;
+            }
+            return true;
+        }
+
         return false;
     }
 
     @Override
     public boolean swapItems(int index1, int index2) {
+
+        if (inventory[index1] != null && inventory[index2] != null) {
+            AbstractItem tmp = inventory[index2];
+            inventory[index2] = inventory[index1];
+            inventory[index1] = tmp;
+            return true;
+        }
+
         return false;
     }
 
     @Override
     public boolean moveItem(int index, int newIndex) {
+
+        if (inventory[index] != null && inventory[newIndex] == null) {
+            inventory[newIndex] = inventory[index];
+            inventory[index] = null;
+            return true;
+        }
+
         return false;
     }
 
     @Override
     public boolean combineItems(int index1, int index2) {
+
+        if (inventory[index1].getType().equals(inventory[index2].getType())) {
+            if (Arrays.asList(stackable).contains(inventory[index1].getType()) && Arrays.asList(stackable).contains(inventory[index2].getType())) {
+                if (inventory[index1].getAmount() + inventory[index2].getAmount() <= inventory[index1].getMaxAmount()) {
+                    inventory[index1].setAmount(inventory[index1].getAmount() + inventory[index2].getAmount());
+                    inventory[index2] = null;
+                } else {
+                    inventory[index2].setAmount(inventory[index2].getAmount() - (inventory[index1].getMaxAmount() - inventory[index1].getAmount()));
+                    inventory[index1].setAmount(inventory[index1].getMaxAmount());
+                }
+                return true;
+            }
+        }
+
         return false;
     }
 
     @Override
     public boolean equipItem(int index) {
+
+        if (inventory[index] instanceof EquippableItem) {
+            if (equippedItem != null) {
+                EquippableItem tmp = equippedItem;
+                equippedItem = (EquippableItem) inventory[index];
+                inventory[index] = tmp;
+                return true;
+            }
+        } else {
+            equippedItem = (EquippableItem) inventory[index];
+            inventory[index] = null;
+            return true;
+        }
+
         return false;
     }
 
@@ -103,16 +182,25 @@ public class Inventory implements BaseInventory {
 
     @Override
     public int emptySlots() {
-        return 0;
+        int space = 0;
+
+        for (AbstractItem abstractItem : inventory) {
+            if (abstractItem == null) {
+                space++;
+            }
+        }
+
+        return space;
     }
 
     @Override
     public EquippableItem equippedItem() {
-        return null;
+        return equippedItem;
     }
 
     @Override
     public AbstractItem getItem(int index) {
-        return null;
+        return inventory[index];
     }
+
 }

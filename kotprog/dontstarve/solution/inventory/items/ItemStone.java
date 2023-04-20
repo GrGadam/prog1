@@ -10,7 +10,6 @@ public class ItemStone extends AbstractItem {
      * @param amount az item mennyisége
      */
     public ItemStone(int amount) {
-        super(ItemType.STONE, amount, 10);
+        super(ItemType.STONE, amount);
     }
-
 }
