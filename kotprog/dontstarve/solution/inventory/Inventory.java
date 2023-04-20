@@ -8,58 +8,41 @@ import java.util.Arrays;
 
 public class Inventory implements BaseInventory {
 
-
     private AbstractItem[] inventory = new AbstractItem[10];
-    //private List<AbstractItem> inventory = new ArrayList<>(10);
     private EquippableItem equippedItem = null;
 
     private final ItemType[] stackable = {ItemType.LOG, ItemType.STONE, ItemType.TWIG, ItemType.RAW_CARROT, ItemType.COOKED_CARROT, ItemType.RAW_BERRY, ItemType.COOKED_BERRY};
+    private final ItemType[] eatable = {ItemType.RAW_CARROT, ItemType.RAW_BERRY, ItemType.COOKED_CARROT, ItemType.COOKED_BERRY};
 
     @Override
     public boolean addItem(AbstractItem item) {
 
-
-        return false;
-    }
-
-
-    /*
-    @Override
-    public boolean addItem(AbstractItem item) {
-
-        if (item instanceof EquippableItem) {
-            for (int i = 0; i < 10; i++) {
-                if (inventory.get(i) == null) {
-                    inventory.add(i, item);
-                    return true;
+        if (Arrays.asList(stackable).contains(item.getType())) {
+            int i = 0;
+            for (AbstractItem ai : inventory) {
+                if (ai.getType().equals(item.getType())) {
+                    if (ai.getAmount() < ai.getMaxAmount()) {
+                        if (ai.getAmount() + item.getAmount() > ai.getMaxAmount()) {
+                            item.setAmount(item.getAmount() - (ai.getMaxAmount() - ai.getAmount()));
+                            inventory[i].setAmount(inventory[i].getMaxAmount());
+                        } else {
+                            inventory[i].setAmount(inventory[i].getAmount() + item.getAmount());
+                            return true;
+                        }
+                    }
                 }
+                i++;
             }
-        }
-        else {
-            for ( AbstractItem i : inventory ) {
-                if (i.getType().equals(item.getType())) {
-                    if (i.getAmount() < i.getMaxAmount()) {
-                        //Ha az item darbszámának hozzáadása meghaladná a max stackméretet
-                        if (i.getAmount() + item.getAmount() > i.getMaxAmount()) {
-                            int maradek = (i.getAmount() + item.getAmount()) % i.getMaxAmount();
-                            i.setAmount(i.getMaxAmount());
 
-                            for (int j = 0; j < 10; j++) {
-                                if (inventory.get(j) == null) {
-                                    item.setAmount(maradek);
-                                    inventory.add(j, item);
-                                }
-                            }
+            if (item.getAmount() > 0) {
+                if (emptySlots() > 0) {
+                    i = 0;
+                    for (AbstractItem ai : inventory) {
+                        if (ai == null) {
+                            inventory[i] = item;
                             return true;
                         }
-                        else {
-                            for (int j = 0; j < 10; j++) {
-                                if (inventory.get(j) == null) {
-                                    inventory.add(j, item);
-                                }
-                            }
-                            return true;
-                        }
+                        i++;
                     }
                 }
             }
@@ -67,11 +50,12 @@ public class Inventory implements BaseInventory {
 
         return false;
     }
-     */
 
     @Override
     public AbstractItem dropItem(int index) {
-        return null;
+        AbstractItem dropped = inventory[index];
+        inventory[index] = null;
+        return dropped;
     }
 
     @Override
@@ -91,6 +75,9 @@ public class Inventory implements BaseInventory {
                         if (item.getAmount() <= amount) {
                             amount -= item.getMaxAmount();
                             inventory[i] = null;
+                        } else {
+                            inventory[i].setAmount(inventory[i].getAmount() - amount);
+                            return true;
                         }
                     }
                 }
@@ -167,16 +154,52 @@ public class Inventory implements BaseInventory {
 
     @Override
     public EquippableItem unequipItem() {
+
+        if (equippedItem != null) {
+            if (emptySlots() == 0) {
+                //TODO drop item
+            } else {
+                for (int i = 0; i < inventory.length; i++) {
+                    if (inventory[i] == null) {
+                        inventory[i] = equippedItem;
+                        equippedItem = null;
+                    }
+                }
+            }
+        }
+
         return null;
     }
 
     @Override
     public ItemType cookItem(int index) {
+        if (Arrays.asList(eatable).contains(inventory[index].getType()) && inventory[index].getType().name().contains("RAW")) {
+            if (inventory[index].getAmount() == 1) {
+                ItemType itemType = inventory[index].getType();
+                inventory[index] = null;
+                return itemType;
+            } else if (inventory[index].getAmount() >= 1) {
+                inventory[index].setAmount(inventory[index].getAmount() - 1);
+                return inventory[index].getType();
+            }
+        }
+
         return null;
     }
 
     @Override
     public ItemType eatItem(int index) {
+        if (Arrays.asList(eatable).contains(inventory[index].getType())) {
+            if (inventory[index].getAmount() == 1) {
+                ItemType itemType = inventory[index].getType();
+                inventory[index] = null;
+                return itemType;
+            } else if (inventory[index].getAmount() >= 1) {
+                inventory[index].setAmount(inventory[index].getAmount() - 1);
+                return inventory[index].getType();
+            }
+        }
+
         return null;
     }
 
