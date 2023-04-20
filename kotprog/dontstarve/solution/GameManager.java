@@ -4,6 +4,7 @@ import prog1.kotprog.dontstarve.solution.character.BaseCharacter;
 import prog1.kotprog.dontstarve.solution.character.actions.Action;
 import prog1.kotprog.dontstarve.solution.exceptions.NotImplementedException;
 import prog1.kotprog.dontstarve.solution.level.BaseField;
+import prog1.kotprog.dontstarve.solution.level.Field;
 import prog1.kotprog.dontstarve.solution.level.Level;
 import prog1.kotprog.dontstarve.solution.utility.Position;
 
@@ -14,6 +15,11 @@ import java.util.Random;
  * Az osztály a singleton tervezési mintát valósítja meg.
  */
 public final class GameManager {
+
+    private Level level;
+    private Field[][] fields;
+
+
     /**
      * Az osztályból létrehozott egyetlen példány (nem lehet final).
      */
@@ -27,7 +33,9 @@ public final class GameManager {
     /**
      * Az osztály privát konstruktora.
      */
-    private GameManager() {}
+    private GameManager() {
+
+    }
 
     /**
      * Az osztályból létrehozott példány elérésére szolgáló metódus.
@@ -86,7 +94,15 @@ public final class GameManager {
      * @param level a fájlból betöltött pálya
      */
     public void loadLevel(Level level) {
-        throw new NotImplementedException();
+        this.level = level;
+        fields = new Field[level.getHeight()][level.getWidth()];
+
+        for (int sor = 0; sor < level.getHeight(); sor++) {
+            for (int oszlop = 0; oszlop < level.getWidth(); oszlop++) {
+                fields[sor][oszlop].setColor(level.getColor(sor, oszlop));
+            }
+        }
+
     }
 
     /**
@@ -96,7 +112,8 @@ public final class GameManager {
      * @return az adott koordinátán lévő mező
      */
     public BaseField getField(int x, int y) {
-        throw new NotImplementedException();
+
+        return null;
     }
 
     /**
@@ -165,4 +182,10 @@ public final class GameManager {
     public void setTutorial(boolean tutorial) {
         throw new NotImplementedException();
     }
+
+    public Level getLevel() {
+        return this.level;
+    }
+
+
 }

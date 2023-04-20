@@ -6,6 +6,7 @@ import prog1.kotprog.dontstarve.solution.inventory.items.AbstractItem;
  * A pálya egy általános mezőjét leíró interface.
  */
 public interface BaseField {
+
     /**
      * Ezen metódus segítségével lekérdezhető, hogy a mező járható-e.
      * @return igaz, amennyiben a mező járható; hamis egyébként

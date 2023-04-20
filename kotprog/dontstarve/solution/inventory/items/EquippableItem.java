@@ -6,6 +6,9 @@ import prog1.kotprog.dontstarve.solution.exceptions.NotImplementedException;
  * Felvehető / kézbe vehető item leírására szolgáló osztály.
  */
 public abstract class EquippableItem extends AbstractItem {
+
+    private float percentage = 1;
+
     /**
      * Konstruktor, amellyel a tárgy létrehozható.
      *
@@ -20,6 +23,10 @@ public abstract class EquippableItem extends AbstractItem {
      * @return a tárgy használatlansága, %-ban (100%: tökéletes állapot)
      */
     public float percentage() {
-        throw new NotImplementedException();
+        return percentage;
+    }
+
+    public void setPercentage(float percentage) {
+        this.percentage = percentage;
     }
 }
