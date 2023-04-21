@@ -129,18 +129,22 @@ public final class GameManager {
      * @param level a fájlból betöltött pálya
      */
     public void loadLevel(Level level) {
-        this.level = level;
-        fields = new Field[level.getHeight()][level.getWidth()];
 
-        for (int sor = 0; sor < level.getHeight(); sor++) {
-            for (int oszlop = 0; oszlop < level.getWidth(); oszlop++) {
-                Field field = new Field();
-                field.setColor(level.getColor(sor, oszlop));
-                fields[sor][oszlop] = field;
+        if (!isLevelLoaded) {
+            this.level = level;
+            fields = new Field[level.getHeight()][level.getWidth()];
+
+            for (int sor = 0; sor < level.getHeight(); sor++) {
+                for (int oszlop = 0; oszlop < level.getWidth(); oszlop++) {
+                    Field field = new Field();
+                    field.setColor(level.getColor(sor, oszlop));
+                    fields[sor][oszlop] = field;
+                }
             }
+
+            isLevelLoaded = true;
         }
 
-        isLevelLoaded = true;
     }
 
     public boolean isLevelLoaded() {
