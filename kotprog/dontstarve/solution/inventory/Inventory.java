@@ -10,10 +10,19 @@ public class Inventory implements BaseInventory {
 
     private AbstractItem[] inventory = new AbstractItem[10];
     private EquippableItem equippedItem = null;
+    private String characterName = null;
 
     private final ItemType[] stackable = {ItemType.LOG, ItemType.STONE, ItemType.TWIG, ItemType.RAW_CARROT, ItemType.COOKED_CARROT, ItemType.RAW_BERRY, ItemType.COOKED_BERRY};
     private final ItemType[] eatable = {ItemType.RAW_CARROT, ItemType.RAW_BERRY, ItemType.COOKED_CARROT, ItemType.COOKED_BERRY};
     private final ItemType[] equippable = {ItemType.AXE, ItemType.PICKAXE, ItemType.TORCH, ItemType.SPEAR};
+
+    public Inventory() {
+
+    }
+
+    public Inventory(String characterName) {
+        this.characterName = characterName;
+    }
 
     @Override
     public boolean addItem(AbstractItem item) {
@@ -239,5 +248,9 @@ public class Inventory implements BaseInventory {
 
     public AbstractItem[] getItems() {
         return inventory;
+    }
+
+    public void setCharacterName(String characterName) {
+        this.characterName = characterName;
     }
 }

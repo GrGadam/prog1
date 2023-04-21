@@ -17,7 +17,7 @@ public class Character implements BaseCharacter {
 
     public Character (String name, boolean player) {
         this.name = name;
-        this.inventory = new Inventory();
+        this.inventory = new Inventory(name);
         this.health = 100;
         this.hunger = 100;
         this.player = player;
