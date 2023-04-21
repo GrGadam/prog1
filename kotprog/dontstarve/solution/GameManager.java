@@ -1,13 +1,17 @@
 package prog1.kotprog.dontstarve.solution;
 
 import prog1.kotprog.dontstarve.solution.character.BaseCharacter;
+import prog1.kotprog.dontstarve.solution.character.Character;
 import prog1.kotprog.dontstarve.solution.character.actions.Action;
 import prog1.kotprog.dontstarve.solution.exceptions.NotImplementedException;
+import prog1.kotprog.dontstarve.solution.exceptions.PlayerAlreadyJoinedException;
 import prog1.kotprog.dontstarve.solution.level.BaseField;
 import prog1.kotprog.dontstarve.solution.level.Field;
 import prog1.kotprog.dontstarve.solution.level.Level;
 import prog1.kotprog.dontstarve.solution.utility.Position;
 
+import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -16,8 +20,12 @@ import java.util.Random;
  */
 public final class GameManager {
 
+    private boolean isLevelLoaded = false;
     private Level level;
     private Field[][] fields;
+    private ArrayList<Character> characters;
+
+    private boolean hasPlayer;
 
 
     /**
@@ -34,7 +42,8 @@ public final class GameManager {
      * Az osztály privát konstruktora.
      */
     private GameManager() {
-
+        characters = new ArrayList<>();
+        hasPlayer = false;
     }
 
     /**
@@ -67,7 +76,18 @@ public final class GameManager {
      * @return a karakter pozíciója a pályán, vagy (Integer.MAX_VALUE, Integer.MAX_VALUE) ha nem sikerült hozzáadni
      */
     public Position joinCharacter(String name, boolean player) {
-        throw new NotImplementedException();
+
+        if (!isGameStarted()) {
+            if (getCharacter(name) == null) {
+                if (player && !hasPlayer) {
+                    characters.add(new Character(name, player));
+                } else if (!player) {
+                    characters.add(new Character(name, player));
+                }
+            }
+        }
+
+        return new Position(Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
 
     /**
@@ -76,7 +96,14 @@ public final class GameManager {
      * @return Az adott nevű karakter objektum, vagy null, ha már a karakter meghalt vagy nem is létezett
      */
     public BaseCharacter getCharacter(String name) {
-        throw new NotImplementedException();
+
+        for (BaseCharacter character : characters) {
+            if (character.getName().equals(name)) {
+                return character;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -84,7 +111,15 @@ public final class GameManager {
      * @return Az életben lévő karakterek száma
      */
     public int remainingCharacters() {
-        throw new NotImplementedException();
+        int remaining = 0;
+
+        for (Character character : characters) {
+            if (character.getHp() > 0) {
+                remaining++;
+            }
+        }
+
+        return remaining;
     }
 
     /**
@@ -99,10 +134,17 @@ public final class GameManager {
 
         for (int sor = 0; sor < level.getHeight(); sor++) {
             for (int oszlop = 0; oszlop < level.getWidth(); oszlop++) {
-                fields[sor][oszlop].setColor(level.getColor(sor, oszlop));
+                Field field = new Field();
+                field.setColor(level.getColor(sor, oszlop));
+                fields[sor][oszlop] = field;
             }
         }
 
+        isLevelLoaded = true;
+    }
+
+    public boolean isLevelLoaded() {
+        return isLevelLoaded;
     }
 
     /**
@@ -112,8 +154,7 @@ public final class GameManager {
      * @return az adott koordinátán lévő mező
      */
     public BaseField getField(int x, int y) {
-
-        return null;
+        return fields[y][x];
     }
 
     /**
@@ -185,6 +226,10 @@ public final class GameManager {
 
     public Level getLevel() {
         return this.level;
+    }
+
+    public boolean hasPlayer() {
+        return hasPlayer;
     }
 
 

@@ -13,6 +13,7 @@ public class Inventory implements BaseInventory {
 
     private final ItemType[] stackable = {ItemType.LOG, ItemType.STONE, ItemType.TWIG, ItemType.RAW_CARROT, ItemType.COOKED_CARROT, ItemType.RAW_BERRY, ItemType.COOKED_BERRY};
     private final ItemType[] eatable = {ItemType.RAW_CARROT, ItemType.RAW_BERRY, ItemType.COOKED_CARROT, ItemType.COOKED_BERRY};
+    private final ItemType[] equippable = {ItemType.AXE, ItemType.PICKAXE, ItemType.TORCH, ItemType.SPEAR};
 
     @Override
     public boolean addItem(AbstractItem item) {
@@ -44,6 +45,17 @@ public class Inventory implements BaseInventory {
                         }
                         i++;
                     }
+                }
+            }
+        } else {
+            if (emptySlots() > 0) {
+                int i = 0;
+                for (AbstractItem ai : inventory) {
+                    if (ai == null) {
+                        inventory[i] = item;
+                        return true;
+                    }
+                    i++;
                 }
             }
         }
@@ -136,16 +148,15 @@ public class Inventory implements BaseInventory {
     @Override
     public boolean equipItem(int index) {
 
-        if (inventory[index] instanceof EquippableItem) {
+        if (Arrays.asList(equippable).contains(inventory[index].getType())) {
             if (equippedItem != null) {
                 EquippableItem tmp = equippedItem;
                 equippedItem = (EquippableItem) inventory[index];
                 inventory[index] = tmp;
-                return true;
+            } else {
+                equippedItem = (EquippableItem) inventory[index];
+                inventory[index] = null;
             }
-        } else {
-            equippedItem = (EquippableItem) inventory[index];
-            inventory[index] = null;
             return true;
         }
 
@@ -226,4 +237,7 @@ public class Inventory implements BaseInventory {
         return inventory[index];
     }
 
+    public AbstractItem[] getItems() {
+        return inventory;
+    }
 }

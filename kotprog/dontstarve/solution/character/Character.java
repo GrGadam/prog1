@@ -8,14 +8,19 @@ import prog1.kotprog.dontstarve.solution.utility.Position;
 public class Character implements BaseCharacter {
 
     private String name;
-    private int health = 100;
-    private int hunger = 100;
-    private Inventory inventory = new Inventory();
+    private int health;
+    private int hunger;
+    private Inventory inventory;
     private Position position;
     private Action lastAction;
+    private boolean player;
 
-    public Character (String name) {
+    public Character (String name, boolean player) {
         this.name = name;
+        this.inventory = new Inventory();
+        this.health = 100;
+        this.hunger = 100;
+        this.player = player;
     }
 
     @Override
@@ -79,5 +84,9 @@ public class Character implements BaseCharacter {
     @Override
     public String getName() {
         return name;
+    }
+
+    public boolean isPlayer() {
+        return player;
     }
 }
