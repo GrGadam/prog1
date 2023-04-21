@@ -15,21 +15,6 @@ public class Main {
         testCharacter();
         testInventory();
 
-        /*
-        System.out.println("Inventory:");
-        int i = 0;
-        for (AbstractItem item : ((Inventory) character.getInventory()).getItems()) {
-            if (item != null) {
-                System.out.println(i+". " + item.getType().name() + " " + item.getAmount() + "db");
-            }
-            i++;
-        }
-
-
-        System.out.println(character.getInventory().equipItem(0));
-        System.out.println(character.getInventory().equippedItem().getType().name());
-        */
-
     }
 
     public static void testLevel() {
@@ -102,6 +87,27 @@ public class Main {
     }
 
     public static void testInventory() {
+
+        System.out.println("<--------- Starting Inventory testing ---------->");
+
+        if (GameManager.getInstance().getCharacter("Player").getInventory().addItem(new ItemAxe())) {
+            System.out.println("✓ 1. Add AXE to Player inventory");
+        } else {
+            System.out.println("! --> 1. Error: Could not add AXE to Player inventory");
+        }
+
+        try {
+            System.out.println("2. Player inventory:");
+            int i = 0;
+            for (AbstractItem item : ((Inventory) GameManager.getInstance().getCharacter("Player").getInventory()).getItems()) {
+                if (item != null) {
+                    System.out.println(i+". " + item.getType().name() + " " + item.getAmount() + "db");
+                }
+                i++;
+            }
+        } catch (Exception ex) {
+            System.out.println("! --> 2. Inventory Error");
+        }
 
     }
 
