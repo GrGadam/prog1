@@ -26,6 +26,8 @@ public final class GameManager {
     private ArrayList<Character> characters;
 
     private boolean hasPlayer;
+    private boolean gameStarted;
+    private boolean tutorial;
 
 
     /**
@@ -76,6 +78,8 @@ public final class GameManager {
      * @return a karakter pozíciója a pályán, vagy (Integer.MAX_VALUE, Integer.MAX_VALUE) ha nem sikerült hozzáadni
      */
     public Position joinCharacter(String name, boolean player) {
+
+        //TODO add positions
 
         if (!isGameStarted()) {
             if (getCharacter(name) == null) {
@@ -235,6 +239,5 @@ public final class GameManager {
     public boolean hasPlayer() {
         return hasPlayer;
     }
-
 
 }
