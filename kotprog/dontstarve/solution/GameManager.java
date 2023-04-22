@@ -90,13 +90,13 @@ public final class GameManager {
             if (isLevelLoaded) {
                 if (getCharacter(name) == null) {
                     if (player && !hasPlayer) {
-                        Character c = new Character(name, player);
+                        Character c = new Character(name, true);
                         c.setPosition(calculateStartingPosition(name));
                         characters.add(c);
                         hasPlayer = true;
                         return c.getCurrentPosition();
                     } else if (!player) {
-                        Character c = new Character(name, player);
+                        Character c = new Character(name, false);
                         c.setPosition(calculateStartingPosition(name));
                         characters.add(c);
                         return c.getCurrentPosition();
