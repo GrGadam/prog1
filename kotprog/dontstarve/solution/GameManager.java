@@ -4,6 +4,7 @@ import prog1.kotprog.dontstarve.solution.character.BaseCharacter;
 import prog1.kotprog.dontstarve.solution.character.Character;
 import prog1.kotprog.dontstarve.solution.character.actions.Action;
 import prog1.kotprog.dontstarve.solution.exceptions.NotImplementedException;
+import prog1.kotprog.dontstarve.solution.inventory.items.*;
 import prog1.kotprog.dontstarve.solution.level.BaseField;
 import prog1.kotprog.dontstarve.solution.level.Field;
 import prog1.kotprog.dontstarve.solution.level.Level;
@@ -32,7 +33,6 @@ public final class GameManager {
     private boolean tutorial;
     private Character winner;
     private int time;
-
 
     /**
      * Az osztályból létrehozott egyetlen példány (nem lehet final).
@@ -94,11 +94,13 @@ public final class GameManager {
                         c.setPosition(calculateStartingPosition(name));
                         characters.add(c);
                         hasPlayer = true;
+                        addRandomMaterials(name);
                         return c.getCurrentPosition();
                     } else if (!player) {
                         Character c = new Character(name, false);
                         c.setPosition(calculateStartingPosition(name));
                         characters.add(c);
+                        addRandomMaterials(name);
                         return c.getCurrentPosition();
                     }
                 }
@@ -107,6 +109,26 @@ public final class GameManager {
         }
 
         return new Position(Integer.MAX_VALUE, Integer.MAX_VALUE);
+    }
+
+    private void addRandomMaterials(String name) {
+        int i = 4;
+        while (i > 0) {
+            GameManager.getInstance().getCharacter(name).getInventory().addItem(getRandomMaterial());
+            i--;
+        }
+    }
+
+    private AbstractItem getRandomMaterial() {
+        int rand = random.nextInt(0, 4);
+        return switch (rand) {
+            case 0 -> new ItemLog(1);
+            case 1 -> new ItemStone(1);
+            case 2 -> new ItemTwig(1);
+            case 3 -> new ItemRawBerry(1);
+            case 4 -> new ItemRawCarrot(1);
+            default -> null;
+        };
     }
 
     private Position calculateStartingPosition(String name) {

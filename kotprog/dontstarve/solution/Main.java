@@ -89,6 +89,7 @@ public class Main {
 
         if (!GameManager.getInstance().joinCharacter("player", true).equals(new Position(Integer.MAX_VALUE, Integer.MAX_VALUE))) {
             System.out.println("✓ 1. First Player join: Successfull");
+            printInventory("player");
         } else {
             System.out.println("! --> 1. Error First Player join: Fail");
         }
