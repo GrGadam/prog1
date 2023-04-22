@@ -137,7 +137,7 @@ public final class GameManager {
         int oszlop = -1;
         int radius = 50;
 
-        for (int r = 0; r < 10; r++) {
+        for (int r = 0; r < 9; r++) {
             for (int x = 0; x < level.getHeight(); x++) {
                 for (int y = 0; y < getLevel().getWidth(); y++) {
                     if (fields[x][y].isWalkable()) {
@@ -169,10 +169,10 @@ public final class GameManager {
         }
 
         for (Position pos : characterPos) {
-            int dx = ((int) pos.getNearestWholePosition().getX()) - sor;
-            int dy = ((int) pos.getNearestWholePosition().getY()) - oszlop;
+            int x = ((int) pos.getNearestWholePosition().getX());
+            int y = ((int) pos.getNearestWholePosition().getY());
 
-            if (!(radius > dx * dx + dy * dy)) {
+            if (radius <= Math.sqrt((sor - x) * (sor - x) + (oszlop - y) * (oszlop - y))) {
                 return true;
             }
         }
