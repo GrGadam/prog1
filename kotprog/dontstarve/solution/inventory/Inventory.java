@@ -1,10 +1,14 @@
 package prog1.kotprog.dontstarve.solution.inventory;
 
+import prog1.kotprog.dontstarve.solution.GameManager;
 import prog1.kotprog.dontstarve.solution.inventory.items.AbstractItem;
 import prog1.kotprog.dontstarve.solution.inventory.items.EquippableItem;
 import prog1.kotprog.dontstarve.solution.inventory.items.ItemType;
+import prog1.kotprog.dontstarve.solution.level.Field;
+import prog1.kotprog.dontstarve.solution.utility.Position;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Inventory implements BaseInventory {
 
@@ -30,7 +34,7 @@ public class Inventory implements BaseInventory {
         if (Arrays.asList(stackable).contains(item.getType())) {
             int i = 0;
             for (AbstractItem ai : inventory) {
-                if (ai.getType().equals(item.getType())) {
+                if (ai != null && ai.getType().equals(item.getType())) {
                     if (ai.getAmount() < ai.getMaxAmount()) {
                         if (ai.getAmount() + item.getAmount() > ai.getMaxAmount()) {
                             item.setAmount(item.getAmount() - (ai.getMaxAmount() - ai.getAmount()));
@@ -177,7 +181,9 @@ public class Inventory implements BaseInventory {
 
         if (equippedItem != null) {
             if (emptySlots() == 0) {
-                //TODO drop item
+                Position p = Objects.requireNonNull(GameManager.getInstance().getCharacter(characterName)).getCurrentPosition().getNearestWholePosition();
+                ((Field)GameManager.getInstance().getField((int) p.getX(), (int) p.getY())).addItem(equippedItem);
+                equippedItem = null;
             } else {
                 for (int i = 0; i < inventory.length; i++) {
                     if (inventory[i] == null) {

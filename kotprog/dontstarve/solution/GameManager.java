@@ -89,12 +89,16 @@ public final class GameManager {
             if (isLevelLoaded) {
                 if (getCharacter(name) == null) {
                     if (player && !hasPlayer) {
-                        characters.add(new Character(name, player));
+                        Character c = new Character(name, player);
+                        c.setPosition(calculateStartingPosition(name));
+                        characters.add(c);
                         hasPlayer = true;
-                        return calculateStartingPosition(name);   //test
+                        return c.getCurrentPosition();
                     } else if (!player) {
-                        characters.add(new Character(name, player));
-                        return calculateStartingPosition(name);   //test
+                        Character c = new Character(name, player);
+                        c.setPosition(calculateStartingPosition(name));
+                        characters.add(c);
+                        return c.getCurrentPosition();
                     }
                 }
             }
@@ -136,16 +140,20 @@ public final class GameManager {
             characterPos.add(c.getCurrentPosition());
         }
 
+        if (characterPos.size() == 0) {
+            return true;
+        }
+
         for (Position pos : characterPos) {
             int dx = ((int) pos.getNearestWholePosition().getX()) - sor;
             int dy = ((int) pos.getNearestWholePosition().getY()) - oszlop;
 
             if (!(radius > dx * dx + dy * dy)) {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     /**

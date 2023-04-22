@@ -4,6 +4,8 @@ import prog1.kotprog.dontstarve.solution.character.Character;
 import prog1.kotprog.dontstarve.solution.inventory.Inventory;
 import prog1.kotprog.dontstarve.solution.inventory.items.AbstractItem;
 import prog1.kotprog.dontstarve.solution.inventory.items.ItemAxe;
+import prog1.kotprog.dontstarve.solution.inventory.items.ItemLog;
+import prog1.kotprog.dontstarve.solution.level.Field;
 import prog1.kotprog.dontstarve.solution.level.Level;
 import prog1.kotprog.dontstarve.solution.utility.Position;
 
@@ -12,11 +14,26 @@ import java.util.Objects;
 public class Main {
 
     public static void main(String[] args) {
-
         testLevel();
         testCharacter();
         testInventory();
+    }
 
+    private static void printLevel() {
+        int maxSor = GameManager.getInstance().getLevel().getHeight();
+        int maxOszlop = GameManager.getInstance().getLevel().getWidth();
+
+        for (int sor = 0; sor < maxSor; sor++) {
+            for (int oszlop = 0; oszlop < maxOszlop; oszlop++) {
+                Field f = (Field) GameManager.getInstance().getField(sor, oszlop);
+                if (f.isWalkable()) {
+                    System.out.print("\u001B[32m" + "G");
+                } else {
+                    System.out.print("\u001B[34m" + "W");
+                }
+            }
+            System.out.println("\u001B[0m");    //default color
+        }
     }
 
     public static void testLevel() {
@@ -56,6 +73,13 @@ public class Main {
         } catch (Exception ex) {
             System.out.println("! --> 1. Error walkability of Filed");
         }
+
+        try {
+            printLevel();
+        } catch (Exception ex) {
+            System.out.println("! --> 4. Failed to print Level");
+        }
+
 
     }
 
@@ -109,6 +133,33 @@ public class Main {
 
     }
 
+    private static void printInventory(String name) {
+        System.out.print("   ↳ player inventory: ");
+        int i = 0;
+        for (AbstractItem item : ((Inventory) Objects.requireNonNull(GameManager.getInstance().getCharacter(name)).getInventory()).getItems()) {
+            if (item != null) {
+                System.out.print(i + ". " + item.getType().name() + " " + item.getAmount() + "db, ");
+            } else {
+                System.out.print(i + ". " + "null" + " " + "0db, ");
+            }
+            i++;
+        }
+        System.out.println();
+    }
+
+    private static void printFieldItems(String name) {
+        System.out.print("   ↳ items on Field: ");
+        int i = 0;
+        Position playerPos = Objects.requireNonNull(GameManager.getInstance().getCharacter(name)).getCurrentPosition().getNearestWholePosition();
+        for (AbstractItem item : GameManager.getInstance().getField((int) playerPos.getX(), (int) playerPos.getY()).items()) {
+            if (item != null) {
+                System.out.print(i + ". " + item.getType().name() + " " + item.getAmount() + "db, ");
+            }
+            i++;
+        }
+        System.out.println();
+    }
+
     public static void testInventory() {
 
         System.out.println("<--------- Starting Inventory testing ---------->");
@@ -122,17 +173,67 @@ public class Main {
         }
 
         try {
-            System.out.print("   ↳ player inventory: ");
-            int i = 0;
-            for (AbstractItem item : ((Inventory) Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory()).getItems()) {
-                if (item != null) {
-                    System.out.print(i + ". " + item.getType().name() + " " + item.getAmount() + "db, ");
-                }
-                i++;
-            }
-            System.out.println();
+            printInventory("player");
         } catch (Exception ex) {
             System.out.println("! --> 2. Inventory Error");
+        }
+
+        try {
+            Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().equipItem(0);
+            System.out.println("✓ 3. Equip AXE");
+        } catch (Exception ex) {
+            System.out.println("! --> 3. equipItem(0) AXE error");
+        }
+
+        try {
+            int i = 10;
+            while (i > 0) {
+                Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().addItem(new ItemAxe());
+                i--;
+            }
+            System.out.println("✓ 4. Filling player inventory with 10 AXE");
+            printInventory("player");
+            System.out.print("   ↳ player equipped item: ");
+            System.out.print(Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().equippedItem().getType().name() + " " + Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().equippedItem().getAmount() + "db");
+            System.out.println();
+        } catch (Exception ex) {
+            System.out.println("! --> 4. Error while filling player inventory with 10 AXEs");
+        }
+
+        try {
+            Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().unequipItem();
+            System.out.println("✓ 5. unequipItem() with full player inventory");
+            printFieldItems("player");
+        } catch (Exception ex) {
+            System.out.println("! --> 5. Error unequipItem() with full player inventory");
+            System.out.println(ex);
+        }
+
+        try {
+            Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().dropItem(0);
+            System.out.println("✓ 6. Dropped 0. item");
+            printInventory("player");
+        } catch (Exception ex) {
+            System.out.println("! --> 6. Error dropping 0. item");
+            System.out.println(ex);
+        }
+
+        try {
+            Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().addItem(new ItemLog(10));
+            System.out.println("✓ 7. Added 0. stackable logs (10db)");
+            printInventory("player");
+        } catch (Exception ex) {
+            System.out.println("! --> 7. Error adding 0. stackable logs (10db)");
+            System.out.println(ex);
+        }
+
+        try {
+            Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().swapItems(0, 2);
+            System.out.println("✓ 8. Successfully swapped items 0. (10db log) with 2. (AXE)");
+            printInventory("player");
+        } catch (Exception ex) {
+            System.out.println("! --> 8. Error swapping items 0. (10db log) with 2. (AXE");
+            System.out.println(ex);
         }
 
     }
