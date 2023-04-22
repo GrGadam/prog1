@@ -232,8 +232,32 @@ public class Main {
             System.out.println("✓ 8. Successfully swapped items 0. (10db log) with 2. (AXE)");
             printInventory("player");
         } catch (Exception ex) {
-            System.out.println("! --> 8. Error swapping items 0. (10db log) with 2. (AXE");
+            System.out.println("! --> 8. Error swapping items 0. (10db log) with 2. (AXE)");
             System.out.println(ex);
+        }
+
+        try {
+            System.out.println("    9. tesz:");
+            for (int i = 0; i < 10; i++) {
+                Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().dropItem(i);
+                printInventory("player");
+            }
+            System.out.println("✓ 9. Successfully dropped all items from inventory");
+        } catch (Exception ex) {
+            System.out.println("! --> 9. Error while dropping all items from inventory");
+        }
+
+        try {
+            System.out.println("    10. tesz:");
+            int i = 9;
+            while (i > 0) {
+                Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().addItem(new ItemLog(5));
+                printInventory("player");
+                i--;
+            }
+            System.out.println("✓ 10. Successfully added 9x5db log to player inventory");
+        } catch (Exception ex) {
+            System.out.println("! --> 10. Error while adding 9x5db log to player inventory");
         }
 
     }
