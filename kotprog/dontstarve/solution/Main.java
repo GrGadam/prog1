@@ -36,6 +36,36 @@ public class Main {
         }
     }
 
+    private static void printLevelWithPlayers() {
+        int maxSor = GameManager.getInstance().getLevel().getHeight();
+        int maxOszlop = GameManager.getInstance().getLevel().getWidth();
+
+        for (int sor = 0; sor < maxSor; sor++) {
+            for (int oszlop = 0; oszlop < maxOszlop; oszlop++) {
+                Field f = (Field) GameManager.getInstance().getField(sor, oszlop);
+                if (f.isWalkable()) {
+                    boolean isCharacter = false;
+
+                    for (Position p : GameManager.getInstance().getCharacterPositions()) {
+                        if ((int) p.getNearestWholePosition().getX() == sor && (int) p.getNearestWholePosition().getY() == oszlop) {
+                            isCharacter = true;
+                            break;
+                        }
+                    }
+
+                    if (isCharacter) {
+                        System.out.print("\u001B[35m" + "C");
+                    } else {
+                        System.out.print("\u001B[32m" + "G");
+                    }
+                } else {
+                    System.out.print("\u001B[34m" + "W");
+                }
+            }
+            System.out.println("\u001B[0m");    //default color
+        }
+    }
+
     public static void testLevel() {
         System.out.println("<--------- Starting Level testing ---------->");
 
@@ -79,7 +109,6 @@ public class Main {
         } catch (Exception ex) {
             System.out.println("! --> 4. Failed to print Level");
         }
-
 
     }
 
@@ -249,7 +278,7 @@ public class Main {
         }
 
         try {
-            System.out.println("    10. tesz:");
+            System.out.println("    10. test:");
             int i = 9;
             while (i > 0) {
                 Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().addItem(new ItemLog(5));
@@ -260,6 +289,17 @@ public class Main {
         } catch (Exception ex) {
             System.out.println("! --> 10. Error while adding 9x5db log to player inventory");
         }
+
+        printLevelWithPlayers();
+
+        if (!GameManager.getInstance().joinCharacter("bot1", false).equals(new Position(Integer.MAX_VALUE, Integer.MAX_VALUE))) {
+            System.out.println("✓ 11. First Bot join: Successful");
+            printInventory("bot1");
+        } else {
+            System.out.println("! --> 11. Error Bot join: Fail");
+        }
+
+        printLevelWithPlayers();
 
     }
 

@@ -11,6 +11,7 @@ import prog1.kotprog.dontstarve.solution.level.Level;
 import prog1.kotprog.dontstarve.solution.utility.Position;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -146,7 +147,7 @@ public final class GameManager {
                     }
                 }
             }
-            radius = radius - 5;
+            radius -= 5;
         }
 
         return new Position(sor, oszlop);
@@ -359,5 +360,12 @@ public final class GameManager {
 
     public ArrayList<Character> getCharacters() {
         return characters;
+    }
+    public ArrayList<Position> getCharacterPositions() {
+        ArrayList<Position> pos = new ArrayList<>();
+        for ( Character c : characters ) {
+            pos.add(c.getCurrentPosition());
+        }
+        return pos;
     }
 }
