@@ -107,11 +107,19 @@ public final class GameManager {
     private Position calculateStartingPosition(String name) {
         int sor = -1;
         int oszlop = -1;
+        int radius = 50;
 
-        for (int x = 0; x < level.getHeight(); x++) {
-            for (int y = 0; y < getLevel().getWidth(); y++) {
-
+        for (int r = 0; r < 10; r++) {
+            for (int x = 0; x < level.getHeight(); x++) {
+                for (int y = 0; y < getLevel().getWidth(); y++) {
+                    if (fields[x][y].isWalkable()) {
+                        if (checkRadius(x, y, radius)) {
+                            return new Position(x, y);
+                        }
+                    }
+                }
             }
+            radius = radius - 5;
         }
 
         return new Position(sor, oszlop);
