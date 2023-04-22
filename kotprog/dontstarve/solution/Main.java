@@ -7,6 +7,8 @@ import prog1.kotprog.dontstarve.solution.inventory.items.ItemAxe;
 import prog1.kotprog.dontstarve.solution.level.Level;
 import prog1.kotprog.dontstarve.solution.utility.Position;
 
+import java.util.Objects;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -67,19 +69,24 @@ public class Main {
             System.out.println("! --> 1. Error First Player join: Fail");
         }
 
+        if (GameManager.getInstance().getCharacter("player") != null) {
+            System.out.println("✓ 2. Duplicate name detection successfull");
+        } else {
+            System.out.println("! --> 2. Error: Duplicate name detection not working");
+        }
 
-        if (GameManager.getInstance().joinCharacter("player", false).equals(new Position(Integer.MAX_VALUE, Integer.MAX_VALUE))) {
-            System.out.println("✓ 2. Could not add duplicate name Character");
-            System.out.print("Characters: ");
+        if (GameManager.getInstance().joinCharacter("player", false).getX() == new Position(Integer.MAX_VALUE, Integer.MAX_VALUE).getX()) {
+            System.out.println("✓ 3. Could not add duplicate name Character");
+            System.out.print("   ↳ Characters: ");
             for (Character c : GameManager.getInstance().getCharacters()) {
-                System.out.println(" " + c.getName() + ",");
+                System.out.print(" " + c.getName() + ",");
             }
             System.out.println();
         } else {
-            System.out.println("! --> 2. Error: Could add bot with existing name");
-            System.out.print("Characters: ");
+            System.out.println("! --> 3. Error: Could add bot with existing name");
+            System.out.print("   ↳ Characters: ");
             for (Character c : GameManager.getInstance().getCharacters()) {
-                System.out.println(" " + c.getName() + ",");
+                System.out.print(" " + c.getName() + ",");
             }
             System.out.println();
         }
@@ -90,21 +97,24 @@ public class Main {
 
         System.out.println("<--------- Starting Inventory testing ---------->");
 
-        if (GameManager.getInstance().getCharacter("Player").getInventory().addItem(new ItemAxe())) {
-            System.out.println("✓ 1. Add AXE to Player inventory");
-        } else {
+        try {
+            if (Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().addItem(new ItemAxe())) {
+                System.out.println("✓ 1. Add AXE to Player inventory");
+            }
+        } catch (Exception ex) {
             System.out.println("! --> 1. Error: Could not add AXE to Player inventory");
         }
 
         try {
-            System.out.println("2. Player inventory:");
+            System.out.print("   ↳ player inventory: ");
             int i = 0;
-            for (AbstractItem item : ((Inventory) GameManager.getInstance().getCharacter("Player").getInventory()).getItems()) {
+            for (AbstractItem item : ((Inventory) Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory()).getItems()) {
                 if (item != null) {
-                    System.out.println(i+". " + item.getType().name() + " " + item.getAmount() + "db");
+                    System.out.print(i + ". " + item.getType().name() + " " + item.getAmount() + "db, ");
                 }
                 i++;
             }
+            System.out.println();
         } catch (Exception ex) {
             System.out.println("! --> 2. Inventory Error");
         }

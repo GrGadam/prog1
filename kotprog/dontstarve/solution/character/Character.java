@@ -15,7 +15,7 @@ public class Character implements BaseCharacter {
     private Action lastAction;
     private boolean player;
 
-    public Character (String name, boolean player) {
+    public Character(String name, boolean player) {
         this.name = name;
         this.inventory = new Inventory(name);
         this.health = 100;
@@ -27,15 +27,25 @@ public class Character implements BaseCharacter {
     public float getSpeed() {
         float speed = 1;
 
-        if (this.health >= 50) { speed *= 1.0F; }
-        else if (this.health >= 30) { speed *= 0.9F; }
-        else if (this.health >= 10) { speed *= 0.75F; }
-        else { speed *= 0.6F;}
+        if (this.health >= 50) {
+            speed *= 1.0F;
+        } else if (this.health >= 30) {
+            speed *= 0.9F;
+        } else if (this.health >= 10) {
+            speed *= 0.75F;
+        } else {
+            speed *= 0.6F;
+        }
 
-        if (this.hunger >= 50) { speed *= 1.0F; }
-        else if (this.health >= 20) { speed *= 0.9F; }
-        else if (this.health > 0) { speed *= 0.8F; }
-        else { speed *= 0.5F;}
+        if (this.hunger >= 50) {
+            speed *= 1.0F;
+        } else if (this.health >= 20) {
+            speed *= 0.9F;
+        } else if (this.health > 0) {
+            speed *= 0.8F;
+        } else {
+            speed *= 0.5F;
+        }
 
         return speed;
     }

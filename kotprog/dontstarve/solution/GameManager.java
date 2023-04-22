@@ -101,7 +101,7 @@ public final class GameManager {
      */
     public BaseCharacter getCharacter(String name) {
 
-        for (BaseCharacter character : characters) {
+        for (Character character : characters) {
             if (character.getName().equals(name)) {
                 return character;
             }
