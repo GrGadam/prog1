@@ -239,7 +239,15 @@ public final class GameManager {
      * @return igaz, ha sikerült elkezdeni a játékot; hamis egyébként
      */
     public boolean startGame() {
-        throw new NotImplementedException();
+        if (characters.size() >= 2) {
+            if (hasPlayer) {
+                if (!gameStarted) {
+                    gameStarted = true;
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
