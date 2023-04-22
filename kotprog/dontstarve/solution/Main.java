@@ -91,6 +91,22 @@ public class Main {
             System.out.println();
         }
 
+        if (GameManager.getInstance().joinCharacter("player2", true).getX() == new Position(Integer.MAX_VALUE, Integer.MAX_VALUE).getX()) {
+            System.out.println("✓ 4. Could not add duplicate players to game");
+            System.out.print("   ↳ Characters: ");
+            for (Character c : GameManager.getInstance().getCharacters()) {
+                System.out.print(" " + c.getName() + ",");
+            }
+            System.out.println();
+        } else {
+            System.out.println("! --> 4. Error: Could add 2 players to game");
+            System.out.print("   ↳ Characters: ");
+            for (Character c : GameManager.getInstance().getCharacters()) {
+                System.out.print(" " + c.getName() + ",");
+            }
+            System.out.println();
+        }
+
     }
 
     public static void testInventory() {

@@ -32,7 +32,7 @@ public class Position {
      * @return a kiszámolt pozíció
      */
     public Position getNearestWholePosition() {
-        throw new NotImplementedException();
+        return new Position(Math.round(x), Math.round(y));
     }
 
     /**

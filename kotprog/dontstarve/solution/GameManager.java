@@ -10,6 +10,7 @@ import prog1.kotprog.dontstarve.solution.level.Level;
 import prog1.kotprog.dontstarve.solution.utility.Position;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -23,12 +24,13 @@ public final class GameManager {
     private Field[][] fields;
     private ArrayList<Character> characters;
     /**
-    * Van-e már 1 db csatlakozott játékos aki nem bot
-    */
+     * Van-e már 1 db csatlakozott játékos aki nem bot
+     */
     private boolean hasPlayer;
     private boolean gameStarted;
     private boolean gameEnded;
     private boolean tutorial;
+    private Character winner;
 
 
     /**
@@ -84,13 +86,58 @@ public final class GameManager {
     public Position joinCharacter(String name, boolean player) {
 
         if (!gameStarted) {
-            if (getCharacter(name) == null) {
-                characters.add(new Character(name, player));
-                return new Position(1, 1);   //test
+            if (isLevelLoaded) {
+                if (getCharacter(name) == null) {
+                    if (player && !hasPlayer) {
+                        characters.add(new Character(name, player));
+                        hasPlayer = true;
+                        return calculateStartingPosition(name);   //test
+                    } else if (!player) {
+                        characters.add(new Character(name, player));
+                        return calculateStartingPosition(name);   //test
+                    }
+                }
             }
+
         }
 
         return new Position(Integer.MAX_VALUE, Integer.MAX_VALUE);
+    }
+
+    private Position calculateStartingPosition(String name) {
+        int sor = -1;
+        int oszlop = -1;
+
+        for (int x = 0; x < level.getHeight(); x++) {
+            for (int y = 0; y < getLevel().getWidth(); y++) {
+
+            }
+        }
+
+        return new Position(sor, oszlop);
+    }
+
+    /*
+     *   false ha nincs a megadott ponttól radius távolságra másik karakter
+     *   igaz ha van
+     */
+    private boolean checkRadius(int sor, int oszlop, int radius) {
+        List<Position> characterPos = new ArrayList<>();
+
+        for (Character c : characters) {
+            characterPos.add(c.getCurrentPosition());
+        }
+
+        for (Position pos : characterPos) {
+            int dx = ((int) pos.getNearestWholePosition().getX()) - sor;
+            int dy = ((int) pos.getNearestWholePosition().getY()) - oszlop;
+
+            if (!(radius > dx * dx + dy * dy)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -215,7 +262,10 @@ public final class GameManager {
      * @return a győztes karakter vagy null
      */
     public BaseCharacter getWinner() {
-        throw new NotImplementedException();
+        if (gameEnded) {
+            return winner;
+        }
+        return null;
     }
 
     /**
@@ -224,7 +274,7 @@ public final class GameManager {
      * @return igaz, ha a játék már elkezdődött; hamis egyébként
      */
     public boolean isGameStarted() {
-        throw new NotImplementedException();
+        return gameStarted;
     }
 
     /**
@@ -233,7 +283,7 @@ public final class GameManager {
      * @return igaz, ha a játék már befejeződött; hamis egyébként
      */
     public boolean isGameEnded() {
-        throw new NotImplementedException();
+        return gameEnded;
     }
 
     /**
