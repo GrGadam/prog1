@@ -31,6 +31,7 @@ public final class GameManager {
     private boolean gameEnded;
     private boolean tutorial;
     private Character winner;
+    private int time;
 
 
     /**
@@ -243,6 +244,7 @@ public final class GameManager {
             if (hasPlayer) {
                 if (!gameStarted) {
                     gameStarted = true;
+                    time = 0;
                     return true;
                 }
             }
@@ -262,6 +264,7 @@ public final class GameManager {
 
         if (gameStarted && !gameEnded) {
             //player
+            //ActionManager osztály?
 
 
             //bots
@@ -276,7 +279,7 @@ public final class GameManager {
      * @return az aktuális időpillanat
      */
     public int time() {
-        throw new NotImplementedException();
+        return time;
     }
 
     /**
@@ -319,7 +322,9 @@ public final class GameManager {
      * @param tutorial igaz, amennyiben tutorial módot szeretnénk; hamis egyébként
      */
     public void setTutorial(boolean tutorial) {
-        throw new NotImplementedException();
+        if (!gameStarted && characters.size() == 0) {
+            this.tutorial = tutorial;
+        }
     }
 
     public Level getLevel() {
