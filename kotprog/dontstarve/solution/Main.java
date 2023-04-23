@@ -201,15 +201,17 @@ public class Main {
         printLevelWithPlayers();
 
         try {
-            System.out.println("Adding 10 bots:");
-            for (int i = 3; i < 13; i++) {
+            System.out.println("Adding 100 bots:");
+            for (int i = 3; i < 103; i++) {
                 if (!GameManager.getInstance().joinCharacter("bot" + i, false).equals(new Position(Integer.MAX_VALUE, Integer.MAX_VALUE))) {
-
+                    System.out.println("Bot" + i + " joined the game.");
                 }
             }
         } catch (Exception ex) {
-            System.out.println("Error while adding 10 bots");
+            System.out.println("Error while adding 100 bots");
         }
+
+        printLevelWithPlayers();
 
     }
 
