@@ -78,9 +78,12 @@ public class Inventory implements BaseInventory {
 
     @Override
     public AbstractItem dropItem(int index) {
-        AbstractItem dropped = inventory[index];
-        inventory[index] = null;
-        return dropped;
+        if (index >= 0 && index <= 9) {
+            AbstractItem dropped = inventory[index];
+            inventory[index] = null;
+            return dropped;
+        }
+        return null;
     }
 
     @Override
@@ -117,11 +120,13 @@ public class Inventory implements BaseInventory {
     @Override
     public boolean swapItems(int index1, int index2) {
 
-        if (inventory[index1] != null && inventory[index2] != null) {
-            AbstractItem tmp = inventory[index2];
-            inventory[index2] = inventory[index1];
-            inventory[index1] = tmp;
-            return true;
+        if (index1 >= 0 && index1 <= 9 && index2 >= 0 && index2 <= 9) {
+            if (inventory[index1] != null && inventory[index2] != null) {
+                AbstractItem tmp = inventory[index2];
+                inventory[index2] = inventory[index1];
+                inventory[index1] = tmp;
+                return true;
+            }
         }
 
         return false;
@@ -129,11 +134,12 @@ public class Inventory implements BaseInventory {
 
     @Override
     public boolean moveItem(int index, int newIndex) {
-
-        if (inventory[index] != null && inventory[newIndex] == null) {
-            inventory[newIndex] = inventory[index];
-            inventory[index] = null;
-            return true;
+        if (index >= 0 && index <= 9 && newIndex >= 0 && newIndex <= 9) {
+            if (inventory[index] != null && inventory[newIndex] == null) {
+                inventory[newIndex] = inventory[index];
+                inventory[index] = null;
+                return true;
+            }
         }
 
         return false;
@@ -161,16 +167,18 @@ public class Inventory implements BaseInventory {
     @Override
     public boolean equipItem(int index) {
 
-        if (Arrays.asList(equippable).contains(inventory[index].getType())) {
-            if (equippedItem != null) {
-                EquippableItem tmp = equippedItem;
-                equippedItem = (EquippableItem) inventory[index];
-                inventory[index] = tmp;
-            } else {
-                equippedItem = (EquippableItem) inventory[index];
-                inventory[index] = null;
+        if (inventory[index] != null) {
+            if (Arrays.asList(equippable).contains(inventory[index].getType())) {
+                if (equippedItem != null) {
+                    EquippableItem tmp = equippedItem;
+                    equippedItem = (EquippableItem) inventory[index];
+                    inventory[index] = tmp;
+                } else {
+                    equippedItem = (EquippableItem) inventory[index];
+                    inventory[index] = null;
+                }
+                return true;
             }
-            return true;
         }
 
         return false;
@@ -182,7 +190,7 @@ public class Inventory implements BaseInventory {
         if (equippedItem != null) {
             if (emptySlots() == 0) {
                 Position p = Objects.requireNonNull(GameManager.getInstance().getCharacter(characterName)).getCurrentPosition().getNearestWholePosition();
-                ((Field)GameManager.getInstance().getField((int) p.getX(), (int) p.getY())).addItem(equippedItem);
+                ((Field) GameManager.getInstance().getField((int) p.getX(), (int) p.getY())).addItem(equippedItem);
                 equippedItem = null;
             } else {
                 for (int i = 0; i < inventory.length; i++) {
