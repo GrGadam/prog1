@@ -237,7 +237,7 @@ public final class GameManager {
             for (int sor = 0; sor < level.getHeight(); sor++) {
                 for (int oszlop = 0; oszlop < level.getWidth(); oszlop++) {
                     Field field = new Field();
-                    field.setColor(level.getColor(sor, oszlop));
+                    field.setColor(level.getColor(oszlop, sor));
                     fields[sor][oszlop] = field;
                 }
             }
@@ -259,7 +259,7 @@ public final class GameManager {
      * @return az adott koordinátán lévő mező
      */
     public BaseField getField(int x, int y) {
-        return fields[y][x];
+        return fields[x][y];
     }
 
     /**
