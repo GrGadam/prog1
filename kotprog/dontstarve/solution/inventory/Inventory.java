@@ -148,16 +148,18 @@ public class Inventory implements BaseInventory {
     @Override
     public boolean combineItems(int index1, int index2) {
 
-        if (inventory[index1].getType().equals(inventory[index2].getType())) {
-            if (Arrays.asList(stackable).contains(inventory[index1].getType()) && Arrays.asList(stackable).contains(inventory[index2].getType())) {
-                if (inventory[index1].getAmount() + inventory[index2].getAmount() <= inventory[index1].getMaxAmount()) {
-                    inventory[index1].setAmount(inventory[index1].getAmount() + inventory[index2].getAmount());
-                    inventory[index2] = null;
-                } else {
-                    inventory[index2].setAmount(inventory[index2].getAmount() - (inventory[index1].getMaxAmount() - inventory[index1].getAmount()));
-                    inventory[index1].setAmount(inventory[index1].getMaxAmount());
+        if (index1 >= 0 && index1 <= 9 && index2 >= 0 && index2 <= 9 && inventory[index1] != null && inventory[index2] != null) {
+            if (inventory[index1].getType().equals(inventory[index2].getType())) {
+                if (Arrays.asList(stackable).contains(inventory[index1].getType()) && Arrays.asList(stackable).contains(inventory[index2].getType())) {
+                    if (inventory[index1].getAmount() + inventory[index2].getAmount() <= inventory[index1].getMaxAmount()) {
+                        inventory[index1].setAmount(inventory[index1].getAmount() + inventory[index2].getAmount());
+                        inventory[index2] = null;
+                    } else {
+                        inventory[index2].setAmount(inventory[index2].getAmount() - (inventory[index1].getMaxAmount() - inventory[index1].getAmount()));
+                        inventory[index1].setAmount(inventory[index1].getMaxAmount());
+                    }
+                    return true;
                 }
-                return true;
             }
         }
 
