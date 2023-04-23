@@ -140,7 +140,16 @@ public final class GameManager {
         for (int r = 0; r < 9; r++) {
             for (int x = 0; x < level.getHeight(); x++) {
                 for (int y = 0; y < getLevel().getWidth(); y++) {
-                    if (fields[x][y].isWalkable()) {
+
+                    boolean occupied = false;
+                    for (Position p : getCharacterPositions()) {
+                        if (p.getX() == x && p.getY() == y) {
+                            occupied = true;
+                            break;
+                        }
+                    }
+
+                    if (fields[x][y].isWalkable() && !occupied) {
                         if (checkRadius(x, y, radius)) {
                             return new Position(x, y);
                         }
@@ -155,30 +164,28 @@ public final class GameManager {
 
     /*
      *   false ha nincs a megadott ponttól radius távolságra másik karakter
+     *   fontos hogy megnézze hogy azon a mezőn van e már másik karakter
      *   igaz ha van
      */
     private boolean checkRadius(int sor, int oszlop, int radius) {
-        List<Position> characterPos = new ArrayList<>();
-
-        for (Character c : characters) {
-            characterPos.add(c.getCurrentPosition());
-        }
+        List<Position> characterPos = getCharacterPositions();
 
         if (characterPos.size() == 0) {
             return true;
         }
 
         for (Position pos : characterPos) {
-            int x = ((int) pos.getNearestWholePosition().getX());
-            int y = ((int) pos.getNearestWholePosition().getY());
+            int x = ((int) pos.getX());
+            int y = ((int) pos.getY());
 
-            if (radius <= Math.sqrt((sor - x) * (sor - x) + (oszlop - y) * (oszlop - y))) {
-                return true;
+            if (radius > Math.sqrt((sor - x) * (sor - x) + (oszlop - y) * (oszlop - y))) {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
+
 
     /**
      * Egy adott nevű karakter lekérésére szolgáló metódus.<br>
@@ -361,9 +368,10 @@ public final class GameManager {
     public ArrayList<Character> getCharacters() {
         return characters;
     }
+
     public ArrayList<Position> getCharacterPositions() {
         ArrayList<Position> pos = new ArrayList<>();
-        for ( Character c : characters ) {
+        for (Character c : characters) {
             pos.add(c.getCurrentPosition());
         }
         return pos;

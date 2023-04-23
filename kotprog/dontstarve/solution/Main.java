@@ -123,6 +123,13 @@ public class Main {
             System.out.println("! --> 1. Error First Player join: Fail");
         }
 
+        try {
+            Position p = Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getCurrentPosition().getNearestWholePosition();
+            System.out.println("Player Position: " + p.getX() + " " + p.getY());
+        } catch (Exception ex) {
+            System.out.println("Fail Player position");
+        }
+
         if (GameManager.getInstance().getCharacter("player") != null) {
             System.out.println("✓ 2. Duplicate name detection successfull");
         } else {
@@ -159,6 +166,49 @@ public class Main {
                 System.out.print(" " + c.getName() + ",");
             }
             System.out.println();
+        }
+
+        printLevelWithPlayers();
+
+        if (!GameManager.getInstance().joinCharacter("bot1", false).equals(new Position(Integer.MAX_VALUE, Integer.MAX_VALUE))) {
+            System.out.println("✓ 11. First Bot1 join: Successful");
+            printInventory("bot1");
+        } else {
+            System.out.println("! --> 11. Error Bot1 join: Fail");
+        }
+
+        try {
+            Position p = Objects.requireNonNull(GameManager.getInstance().getCharacter("bot1")).getCurrentPosition().getNearestWholePosition();
+            System.out.println("Bot1 Position: " + p.getX() + " " + p.getY());
+        } catch (Exception ex) {
+            System.out.println("Fail Bot1 position");
+        }
+
+        if (!GameManager.getInstance().joinCharacter("bot2", false).equals(new Position(Integer.MAX_VALUE, Integer.MAX_VALUE))) {
+            System.out.println("✓ 11. First Bot2 join: Successful");
+            printInventory("bot2");
+        } else {
+            System.out.println("! --> 11. Error Bot2 join: Fail");
+        }
+
+        try {
+            Position p = Objects.requireNonNull(GameManager.getInstance().getCharacter("bot2")).getCurrentPosition().getNearestWholePosition();
+            System.out.println("Bot2 Position: " + p.getX() + " " + p.getY());
+        } catch (Exception ex) {
+            System.out.println("Fail Bot2 position");
+        }
+
+        printLevelWithPlayers();
+
+        try {
+            System.out.println("Adding 10 bots:");
+            for (int i = 3; i < 13; i++) {
+                if (!GameManager.getInstance().joinCharacter("bot" + i, false).equals(new Position(Integer.MAX_VALUE, Integer.MAX_VALUE))) {
+
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println("Error while adding 10 bots");
         }
 
     }
@@ -290,16 +340,6 @@ public class Main {
             System.out.println("! --> 10. Error while adding 9x5db log to player inventory");
         }
 
-        printLevelWithPlayers();
-
-        if (!GameManager.getInstance().joinCharacter("bot1", false).equals(new Position(Integer.MAX_VALUE, Integer.MAX_VALUE))) {
-            System.out.println("✓ 11. First Bot join: Successful");
-            printInventory("bot1");
-        } else {
-            System.out.println("! --> 11. Error Bot join: Fail");
-        }
-
-        printLevelWithPlayers();
 
     }
 
