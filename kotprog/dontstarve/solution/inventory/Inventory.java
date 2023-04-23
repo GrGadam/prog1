@@ -190,7 +190,7 @@ public class Inventory implements BaseInventory {
         if (equippedItem != null) {
             if (emptySlots() == 0) {
                 Position p = Objects.requireNonNull(GameManager.getInstance().getCharacter(characterName)).getCurrentPosition().getNearestWholePosition();
-                ((Field) GameManager.getInstance().getField((int) p.getX(), (int) p.getY())).addItem(equippedItem);
+                ((Field) GameManager.getInstance().getField(((int) p.getX()), ((int) p.getY()))).addItem(equippedItem);
                 equippedItem = null;
             } else {
                 for (int i = 0; i < inventory.length; i++) {
@@ -207,14 +207,17 @@ public class Inventory implements BaseInventory {
 
     @Override
     public ItemType cookItem(int index) {
-        if (Arrays.asList(eatable).contains(inventory[index].getType()) && inventory[index].getType().name().contains("RAW")) {
-            if (inventory[index].getAmount() == 1) {
-                ItemType itemType = inventory[index].getType();
-                inventory[index] = null;
-                return itemType;
-            } else if (inventory[index].getAmount() >= 1) {
-                inventory[index].setAmount(inventory[index].getAmount() - 1);
-                return inventory[index].getType();
+
+        if (index >= 0 && index <= 9 && inventory[index] != null) {
+            if (Arrays.asList(eatable).contains(inventory[index].getType()) && inventory[index].getType().name().contains("RAW")) {
+                if (inventory[index].getAmount() == 1) {
+                    ItemType itemType = inventory[index].getType();
+                    inventory[index] = null;
+                    return itemType;
+                } else if (inventory[index].getAmount() >= 1) {
+                    inventory[index].setAmount(inventory[index].getAmount() - 1);
+                    return inventory[index].getType();
+                }
             }
         }
 
@@ -223,14 +226,17 @@ public class Inventory implements BaseInventory {
 
     @Override
     public ItemType eatItem(int index) {
-        if (Arrays.asList(eatable).contains(inventory[index].getType())) {
-            if (inventory[index].getAmount() == 1) {
-                ItemType itemType = inventory[index].getType();
-                inventory[index] = null;
-                return itemType;
-            } else if (inventory[index].getAmount() >= 1) {
-                inventory[index].setAmount(inventory[index].getAmount() - 1);
-                return inventory[index].getType();
+
+        if (index >= 0 && index <= 9 && inventory[index] != null) {
+            if (Arrays.asList(eatable).contains(inventory[index].getType())) {
+                if (inventory[index].getAmount() == 1) {
+                    ItemType itemType = inventory[index].getType();
+                    inventory[index] = null;
+                    return itemType;
+                } else if (inventory[index].getAmount() >= 1) {
+                    inventory[index].setAmount(inventory[index].getAmount() - 1);
+                    return inventory[index].getType();
+                }
             }
         }
 
@@ -257,7 +263,10 @@ public class Inventory implements BaseInventory {
 
     @Override
     public AbstractItem getItem(int index) {
-        return inventory[index];
+        if (index >= 0 && index <= 9) {
+            return inventory[index];
+        }
+        return null;
     }
 
     public AbstractItem[] getItems() {
