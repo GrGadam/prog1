@@ -7,6 +7,7 @@ import prog1.kotprog.dontstarve.solution.inventory.items.ItemType;
 import prog1.kotprog.dontstarve.solution.level.Field;
 import prog1.kotprog.dontstarve.solution.utility.Position;
 
+import java.nio.file.attribute.AttributeView;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -32,6 +33,11 @@ public class Inventory implements BaseInventory {
     public boolean addItem(AbstractItem item) {
 
         if (Arrays.asList(stackable).contains(item.getType())) {
+
+            if (getMaxAddableSize(item) < item.getAmount()) {
+                return false;
+            }
+
             int i = 0;
             for (AbstractItem ai : inventory) {
                 if (ai != null && ai.getType().equals(item.getType())) {
@@ -74,6 +80,20 @@ public class Inventory implements BaseInventory {
         }
 
         return false;
+    }
+
+    private int getMaxAddableSize(AbstractItem item) {
+        int db = 0;
+
+        for (AbstractItem ai : inventory) {
+            if (ai == null) {
+                db += item.getMaxAmount();
+            } else if (ai.getType().equals(item.getType())) {
+                db += item.getMaxAmount() - ai.getAmount();
+            }
+        }
+
+        return db;
     }
 
     @Override

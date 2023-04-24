@@ -215,7 +215,7 @@ public class Main {
 
         try {
             System.out.println("Adding 100 bots:");
-            for (int i = 3; i < 1003; i++) {
+            for (int i = 3; i < 103; i++) {
                 if (!GameManager.getInstance().joinCharacter("bot" + i, false).equals(new Position(Integer.MAX_VALUE, Integer.MAX_VALUE))) {
                     System.out.println("Bot" + i + " joined the game.");
                 }
@@ -355,6 +355,21 @@ public class Main {
             System.out.println("! --> 10. Error while adding 9x5db log to player inventory");
         }
 
+        try {
+            System.out.println("    11. test:");
+            int i = 100;
+            while (i > 0) {
+                if (!(Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().addItem(new ItemLog(6)))) {
+                    System.out.println("Could not add item, inv max");
+                } else {
+                    printInventory("player");
+                }
+                i--;
+            }
+            System.out.println("✓ 11. Successfully added 100x6db log to player inventory");
+        } catch (Exception ex) {
+            System.out.println("! --> 11. Error while adding 100x6db log to player inventory");
+        }
 
     }
 
