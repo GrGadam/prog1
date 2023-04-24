@@ -17,6 +17,7 @@ public class ActionManager {
 
     public void start() {
         switch (action.getType()) {
+            case NONE -> none();
             case STEP -> step();
             case INTERACT -> interact();
             case ATTACK -> attack();
@@ -36,6 +37,10 @@ public class ActionManager {
 
     private void setLastAction() {
         ((Character) Objects.requireNonNull(GameManager.getInstance().getCharacter(character.getName()))).setLastAction(this.action);
+    }
+
+    private void none() {
+        setLastAction();
     }
 
     private void step() {
