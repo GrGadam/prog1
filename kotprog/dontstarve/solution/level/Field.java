@@ -37,7 +37,7 @@ public class Field implements BaseField {
 
     @Override
     public boolean hasBerry() {
-        return hex.equals("#F0000");
+        return hex.equals("#FF0000");
     }
 
     @Override
@@ -69,6 +69,14 @@ public class Field implements BaseField {
             return true;
         }
         return false;
+    }
+
+    public boolean isEmpty() {
+        return hex.equals("#32C832");
+    }
+
+    public boolean isWater() {
+        return hex.equals("#3264C8");
     }
 
     public void setColor(int color) {

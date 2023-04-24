@@ -259,7 +259,12 @@ public final class GameManager {
      * @return az adott koordinátán lévő mező
      */
     public BaseField getField(int x, int y) {
-        return fields[x][y];
+
+        if (x >= 0 && x < level.getHeight() && y >= 0 && y < level.getWidth()) {
+            return fields[x][y];
+        }
+
+        return null;
     }
 
     /**
