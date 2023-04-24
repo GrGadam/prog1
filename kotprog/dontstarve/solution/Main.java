@@ -342,6 +342,7 @@ public class Main {
             System.out.println("! --> 9. Error while dropping all items from inventory");
         }
 
+        /*
         try {
             System.out.println("    10. test:");
             int i = 9;
@@ -354,6 +355,7 @@ public class Main {
         } catch (Exception ex) {
             System.out.println("! --> 10. Error while adding 9x5db log to player inventory");
         }
+         */
 
         try {
             System.out.println("    11. test:");

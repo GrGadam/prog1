@@ -34,38 +34,44 @@ public class Inventory implements BaseInventory {
 
         if (Arrays.asList(stackable).contains(item.getType())) {
 
-            if (getMaxAddableSize(item) < item.getAmount()) {
-                return false;
-            }
-
             int i = 0;
-            for (AbstractItem ai : inventory) {
-                if (ai != null && ai.getType().equals(item.getType())) {
-                    if (ai.getAmount() < ai.getMaxAmount()) {
-                        if (ai.getAmount() + item.getAmount() > ai.getMaxAmount()) {
-                            item.setAmount(item.getAmount() - (ai.getMaxAmount() - ai.getAmount()));
-                            inventory[i].setAmount(inventory[i].getMaxAmount());
+            for (AbstractItem abstractItem : inventory) {
+                if (abstractItem != null && abstractItem.getType().equals(item.getType())) {
+                    if (abstractItem.getAmount() < abstractItem.getMaxAmount()) {
+                        int db = abstractItem.getMaxAmount() - abstractItem.getAmount();
+                        if (db < item.getAmount()) {
+                            item.setAmount(item.getAmount() - db);
+                            inventory[i].setAmount(inventory[i].getAmount() + db);
                         } else {
                             inventory[i].setAmount(inventory[i].getAmount() + item.getAmount());
-                            return true;
+                            item.setAmount(0);
                         }
                     }
                 }
                 i++;
             }
 
-            if (item.getAmount() > 0) {
-                if (emptySlots() > 0) {
-                    i = 0;
-                    for (AbstractItem ai : inventory) {
-                        if (ai == null) {
+            if (item.getAmount() == 0) {
+                return true;
+            } else if (emptySlots() > 0) {
+                i = 0;
+                for (AbstractItem abstractItem : inventory) {
+                    if (abstractItem == null) {
+                        if (item.getAmount() > item.getMaxAmount()) {
+                            item.setAmount(item.getAmount() - item.getMaxAmount());
+                            inventory[i] = item;
+                            inventory[i].setAmount(inventory[i].getMaxAmount());
+                        } else {
                             inventory[i] = item;
                             return true;
                         }
-                        i++;
                     }
+                    i++;
                 }
+
+                return item.getAmount() == 0;
             }
+
         } else {
             if (emptySlots() > 0) {
                 int i = 0;
@@ -80,20 +86,6 @@ public class Inventory implements BaseInventory {
         }
 
         return false;
-    }
-
-    private int getMaxAddableSize(AbstractItem item) {
-        int db = 0;
-
-        for (AbstractItem ai : inventory) {
-            if (ai == null) {
-                db += item.getMaxAmount();
-            } else if (ai.getType().equals(item.getType())) {
-                db += item.getMaxAmount() - ai.getAmount();
-            }
-        }
-
-        return db;
     }
 
     @Override
