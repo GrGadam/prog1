@@ -3,6 +3,7 @@ package prog1.kotprog.dontstarve.solution;
 import prog1.kotprog.dontstarve.solution.character.BaseCharacter;
 import prog1.kotprog.dontstarve.solution.character.Character;
 import prog1.kotprog.dontstarve.solution.character.actions.Action;
+import prog1.kotprog.dontstarve.solution.character.actions.ActionManager;
 import prog1.kotprog.dontstarve.solution.exceptions.NotImplementedException;
 import prog1.kotprog.dontstarve.solution.inventory.items.*;
 import prog1.kotprog.dontstarve.solution.level.BaseField;
@@ -299,11 +300,27 @@ public final class GameManager {
 
         if (gameStarted && !gameEnded) {
             //player
-            //ActionManager osztály?
-
+            ActionManager actionManager = new ActionManager(action, getPlayer());
+            actionManager.start();
 
             //bots
+            if (!tutorial) {
+
+            }
+
+            //idő telése
+            time++;
         }
+
+    }
+
+    public Character getPlayer() {
+        for (Character c : characters) {
+            if (c.isPlayer()) {
+                return c;
+            }
+        }
+        return null;
     }
 
     /**
