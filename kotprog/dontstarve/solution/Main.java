@@ -57,7 +57,7 @@ public class Main {
                     boolean isCharacter = false;
 
                     for (Position p : GameManager.getInstance().getCharacterPositions()) {
-                        if ((int) p.getNearestWholePosition().getX() == sor && (int) p.getNearestWholePosition().getY() == oszlop) {
+                        if ((int) p.getNearestWholePosition().getX() == oszlop && (int) p.getNearestWholePosition().getY() == sor) {
                             isCharacter = true;
                             break;
                         }
@@ -118,6 +118,7 @@ public class Main {
             printLevel();
         } catch (Exception ex) {
             System.out.println("! --> 4. Failed to print Level");
+            System.out.println(ex);
         }
 
         System.out.println("x0 y7 walakble: " + GameManager.getInstance().getField(0,6).hasTree());

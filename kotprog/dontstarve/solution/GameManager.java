@@ -149,7 +149,7 @@ public final class GameManager {
                         }
                     }
 
-                    if (fields[x][y].isWalkable() && !occupied) {
+                    if (fields[y][x].isWalkable() && !occupied) {
                         if (checkRadius(x, y, radius)) {
                             return new Position(x, y);
                         }
@@ -232,13 +232,13 @@ public final class GameManager {
 
         if (!isLevelLoaded) {
             this.level = level;
-            fields = new Field[level.getHeight()][level.getWidth()];
+            fields = new Field[level.getWidth()][level.getHeight()];
 
             for (int sor = 0; sor < level.getHeight(); sor++) {
                 for (int oszlop = 0; oszlop < level.getWidth(); oszlop++) {
                     Field field = new Field();
                     field.setColor(level.getColor(oszlop, sor));
-                    fields[sor][oszlop] = field;
+                    fields[oszlop][sor] = field;
                 }
             }
 
@@ -261,7 +261,7 @@ public final class GameManager {
     public BaseField getField(int x, int y) {
 
         if (x >= 0 && x < level.getHeight() && y >= 0 && y < level.getWidth()) {
-            return fields[x][y];
+            return fields[y][x];
         }
 
         return null;
