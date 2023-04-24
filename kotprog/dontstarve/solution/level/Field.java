@@ -20,6 +20,10 @@ public class Field implements BaseField {
         return !hex.equals("#3264C8");
     }
 
+    public boolean isEmpty() {
+        return hex.equals("#32C832");
+    }
+
     @Override
     public boolean hasTree() {
         return hex.equals("#C86432");
@@ -60,7 +64,10 @@ public class Field implements BaseField {
 
     @Override
     public AbstractItem[] items() {
-        return items.toArray(new AbstractItem[0]);
+        if (isWalkable()) {
+            return items.toArray(new AbstractItem[0]);
+        }
+        return null;
     }
 
     public boolean addItem(AbstractItem item) {
@@ -71,16 +78,12 @@ public class Field implements BaseField {
         return false;
     }
 
-    public boolean isEmpty() {
-        return hex.equals("#32C832");
-    }
-
-    public boolean isWater() {
-        return hex.equals("#3264C8");
-    }
-
     public void setColor(int color) {
         this.hex = String.format("#%06X", (0xFFFFFF & color));
+    }
+
+    public String getHex() {
+        return hex;
     }
 
 }

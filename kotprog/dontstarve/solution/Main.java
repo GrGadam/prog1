@@ -26,11 +26,21 @@ public class Main {
         for (int sor = 0; sor < maxSor; sor++) {
             for (int oszlop = 0; oszlop < maxOszlop; oszlop++) {
                 Field f = (Field) GameManager.getInstance().getField(sor, oszlop);
-                if (f.isWalkable()) {
-                    System.out.print("\u001B[32m" + "G");
-                } else {
-                    System.out.print("\u001B[34m" + "W");
+                assert f != null;
+
+                String hex = f.getHex();
+
+                System.out.print("\u001B[30m");
+                switch (hex) {
+                    case "#32C832" -> System.out.print("\u001B[42m" + " " + "\u001B[0m");
+                    case "#3264C8" -> System.out.print("\u001B[44m" + " " + "\u001B[0m");
+                    case "#C86432" -> System.out.print("\u001B[42m" + "T" + "\u001B[0m");
+                    case "#C8C8C8" -> System.out.print("\033[0;100m" + "S" + "\u001B[0m");
+                    case "#F0B478" -> System.out.print("\u001B[42m" + "G" + "\u001B[0m");
+                    case "#FF0000" -> System.out.print("\033[0;101m" + "B" + "\u001B[0m");
+                    case "#FAC800" -> System.out.print("\033[0;101m" + "C" + "\u001B[0m");
                 }
+
             }
             System.out.println("\u001B[0m");    //default color
         }
@@ -109,6 +119,8 @@ public class Main {
         } catch (Exception ex) {
             System.out.println("! --> 4. Failed to print Level");
         }
+
+        System.out.println("x0 y7 walakble: " + GameManager.getInstance().getField(0,6).hasTree());
 
     }
 
@@ -212,6 +224,8 @@ public class Main {
         }
 
         printLevelWithPlayers();
+
+
 
     }
 
