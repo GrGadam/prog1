@@ -25,7 +25,7 @@ public class Main {
 
         for (int sor = 0; sor < maxSor; sor++) {
             for (int oszlop = 0; oszlop < maxOszlop; oszlop++) {
-                Field f = (Field) GameManager.getInstance().getField(sor, oszlop);
+                Field f = (Field) GameManager.getInstance().getField(oszlop, sor);
                 assert f != null;
 
                 String hex = f.getHex();
@@ -52,7 +52,7 @@ public class Main {
 
         for (int sor = 0; sor < maxSor; sor++) {
             for (int oszlop = 0; oszlop < maxOszlop; oszlop++) {
-                Field f = (Field) GameManager.getInstance().getField(sor, oszlop);
+                Field f = (Field) GameManager.getInstance().getField(oszlop, sor);
                 if (f.isWalkable()) {
                     boolean isCharacter = false;
 
@@ -81,7 +81,7 @@ public class Main {
 
         //1.test
         try {
-            Level level = new Level(System.getProperty("user.dir") + "\\kotprog\\dontstarve\\solution\\" + "level00.png");
+            Level level = new Level(System.getProperty("user.dir") + "\\kotprog\\dontstarve\\solution\\" + "level01.png");
             GameManager.getInstance().loadLevel(level);
             System.out.println("✓ 1. Level loaded successfully");
         } catch (Exception exception) {
