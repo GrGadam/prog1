@@ -215,7 +215,7 @@ public class Main {
 
         try {
             System.out.println("Adding 100 bots:");
-            for (int i = 3; i < 103; i++) {
+            for (int i = 3; i < 1003; i++) {
                 if (!GameManager.getInstance().joinCharacter("bot" + i, false).equals(new Position(Integer.MAX_VALUE, Integer.MAX_VALUE))) {
                     System.out.println("Bot" + i + " joined the game.");
                 }
@@ -225,8 +225,6 @@ public class Main {
         }
 
         printLevelWithPlayers();
-
-
 
     }
 
