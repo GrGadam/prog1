@@ -11,6 +11,8 @@ import java.nio.file.attribute.AttributeView;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static java.util.Objects.isNull;
+
 public class Inventory implements BaseInventory {
 
     private AbstractItem[] inventory = new AbstractItem[10];
@@ -32,16 +34,14 @@ public class Inventory implements BaseInventory {
     @Override
     public boolean addItem(AbstractItem item) {
 
-        if (item.getType() != ItemType.FIRE && item.getType() != null) {
-
+        if (item.getType() != null && item.getType() != ItemType.FIRE) {
             //Equipable
             if (item instanceof EquippableItem) {
                 if (emptySlots() == 0) {
                     return false;
-                }
-                else {
+                } else {
                     int i = 0;
-                    for ( AbstractItem abstractItem : inventory ) {
+                    for (AbstractItem abstractItem : inventory) {
                         if (item.getAmount() == 0) {
                             break;
                         }
@@ -59,11 +59,11 @@ public class Inventory implements BaseInventory {
             else {
                 //Ugyan olyan tipusuakra
                 int i = 0;
-                for ( AbstractItem abstractItem : inventory ) {
+                for (AbstractItem abstractItem : inventory) {
                     if (item.getAmount() == 0) {
                         return true;
                     }
-                    if (abstractItem.getType().equals(item.getType()) && abstractItem.getAmount() < abstractItem.getMaxAmount()) {
+                    if (abstractItem != null && abstractItem.getType().equals(item.getType()) && abstractItem.getAmount() < abstractItem.getMaxAmount()) {
                         int db = abstractItem.getMaxAmount() - abstractItem.getAmount();
 
                         if (db > item.getAmount()) {
@@ -82,7 +82,7 @@ public class Inventory implements BaseInventory {
                     return true;
                 } else {
                     i = 0;
-                    for ( AbstractItem abstractItem : inventory ) {
+                    for (AbstractItem abstractItem : inventory) {
                         if (item.getAmount() == 0) {
                             return true;
                         }
@@ -101,7 +101,6 @@ public class Inventory implements BaseInventory {
                 }
                 return item.getAmount() == 0;
             }
-
         }
 
         return false;
