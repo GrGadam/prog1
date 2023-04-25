@@ -357,6 +357,9 @@ public class Main {
         }
          */
 
+        Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().addItem(new ItemLog(6));
+        Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().moveItem(0, 3);
+
         try {
             System.out.println("    11. test:");
             int i = 100;

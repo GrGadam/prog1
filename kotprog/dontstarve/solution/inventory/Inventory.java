@@ -32,55 +32,57 @@ public class Inventory implements BaseInventory {
     @Override
     public boolean addItem(AbstractItem item) {
 
-        if (Arrays.asList(stackable).contains(item.getType())) {
+        if (item.getType() != ItemType.FIRE) {
+            if (Arrays.asList(stackable).contains(item.getType())) {
 
-            int i = 0;
-            for (AbstractItem abstractItem : inventory) {
-                if (abstractItem != null && abstractItem.getType().equals(item.getType())) {
-                    if (abstractItem.getAmount() < abstractItem.getMaxAmount()) {
-                        int db = abstractItem.getMaxAmount() - abstractItem.getAmount();
-                        if (db < item.getAmount()) {
-                            item.setAmount(item.getAmount() - db);
-                            inventory[i].setAmount(inventory[i].getAmount() + db);
-                        } else {
-                            inventory[i].setAmount(inventory[i].getAmount() + item.getAmount());
-                            item.setAmount(0);
+                int i = 0;
+                for (AbstractItem abstractItem : inventory) {
+                    if (abstractItem != null && abstractItem.getType().equals(item.getType())) {
+                        if (abstractItem.getAmount() < abstractItem.getMaxAmount()) {
+                            int db = abstractItem.getMaxAmount() - abstractItem.getAmount();
+                            if (db < item.getAmount()) {
+                                item.setAmount(item.getAmount() - db);
+                                inventory[i].setAmount(inventory[i].getAmount() + db);
+                            } else {
+                                inventory[i].setAmount(inventory[i].getAmount() + item.getAmount());
+                                item.setAmount(0);
+                            }
                         }
                     }
+                    i++;
                 }
-                i++;
-            }
 
-            if (item.getAmount() == 0) {
-                return true;
-            } else if (emptySlots() > 0) {
-                i = 0;
-                for (AbstractItem abstractItem : inventory) {
-                    if (abstractItem == null) {
-                        if (item.getAmount() > item.getMaxAmount()) {
-                            item.setAmount(item.getAmount() - item.getMaxAmount());
-                            inventory[i] = item;
-                            inventory[i].setAmount(inventory[i].getMaxAmount());
-                        } else {
+                if (item.getAmount() == 0) {
+                    return true;
+                } else if (emptySlots() > 0) {
+                    i = 0;
+                    for (AbstractItem abstractItem : inventory) {
+                        if (abstractItem == null) {
+                            if (item.getAmount() > item.getMaxAmount()) {
+                                item.setAmount(item.getAmount() - item.getMaxAmount());
+                                inventory[i] = item;
+                                inventory[i].setAmount(inventory[i].getMaxAmount());
+                            } else {
+                                inventory[i] = item;
+                                return true;
+                            }
+                        }
+                        i++;
+                    }
+
+                    return item.getAmount() == 0;
+                }
+
+            } else {
+                if (emptySlots() > 0) {
+                    int i = 0;
+                    for (AbstractItem ai : inventory) {
+                        if (ai == null) {
                             inventory[i] = item;
                             return true;
                         }
+                        i++;
                     }
-                    i++;
-                }
-
-                return item.getAmount() == 0;
-            }
-
-        } else {
-            if (emptySlots() > 0) {
-                int i = 0;
-                for (AbstractItem ai : inventory) {
-                    if (ai == null) {
-                        inventory[i] = item;
-                        return true;
-                    }
-                    i++;
                 }
             }
         }
