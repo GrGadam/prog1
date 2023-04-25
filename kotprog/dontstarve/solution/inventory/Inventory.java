@@ -100,6 +100,10 @@ public class Inventory implements BaseInventory {
         return null;
     }
 
+    public void addItemToIndex(int index, AbstractItem item) {
+        inventory[index] = item;
+    }
+
     @Override
     public boolean removeItem(ItemType type, int amount) {
         int elerhetoMennyiseg = 0;

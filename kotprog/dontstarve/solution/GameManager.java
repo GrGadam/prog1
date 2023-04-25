@@ -179,7 +179,7 @@ public final class GameManager {
             int x = ((int) pos.getX());
             int y = ((int) pos.getY());
 
-            if (radius > Math.sqrt((sor - x) * (sor - x) + (oszlop - y) * (oszlop - y))) {
+            if (radius * radius > ((sor - x) * (sor - x) + (oszlop - y) * (oszlop - y))) {
                 return false;
             }
         }

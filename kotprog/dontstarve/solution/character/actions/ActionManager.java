@@ -49,7 +49,7 @@ public class ActionManager {
 
         switch (actionStep.getDirection()) {
             case UP -> {
-                if (position.getY() - character.getSpeed() > 0) {
+                if (position.getY() - character.getSpeed() >= 0) {
                     int x = (int) position.getX();
                     int y = (int) (position.getY() - character.getSpeed());
                     if (Objects.requireNonNull(GameManager.getInstance().getField(x, y)).isWalkable()) {
@@ -79,7 +79,7 @@ public class ActionManager {
             }
 
             case LEFT -> {
-                if (position.getX() - character.getSpeed() > 0) {
+                if (position.getX() - character.getSpeed() >= 0) {
                     int x = (int) (position.getX() - character.getSpeed());
                     int y = (int) position.getY();
                     if (Objects.requireNonNull(GameManager.getInstance().getField(x, y)).isWalkable()) {
