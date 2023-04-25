@@ -32,7 +32,73 @@ public class Inventory implements BaseInventory {
     @Override
     public boolean addItem(AbstractItem item) {
 
-        if (item.getType() != ItemType.FIRE) {
+        if (item.getType() != ItemType.FIRE && item.getType() != null) {
+
+            //Equipable
+            if (item instanceof EquippableItem) {
+                if (emptySlots() == 0) {
+                    return false;
+                }
+                else {
+                    int i = 0;
+                    for ( AbstractItem abstractItem : inventory ) {
+                        if (item.getAmount() == 0) {
+                            break;
+                        }
+                        if (abstractItem == null) {
+                            inventory[i] = item;
+                            inventory[i].setAmount(1);
+                            item.setAmount(item.getAmount() - 1);
+                        }
+                        i++;
+                    }
+                    return item.getAmount() == 0;
+                }
+            }
+            //Stackable
+            else {
+                //Ugyan olyan tipusuakra
+                int i = 0;
+                for ( AbstractItem abstractItem : inventory ) {
+                    if (item.getAmount() == 0) {
+                        return true;
+                    }
+                    if (abstractItem.getType().equals(item.getType()) && abstractItem.getAmount() < abstractItem.getMaxAmount()) {
+                        int db = abstractItem.getMaxAmount() - abstractItem.getAmount();
+
+                        if (db > item.getAmount()) {
+                            inventory[i].setAmount(inventory[i].getAmount() + item.getAmount());
+                            item.setAmount(0);
+                        } else {
+
+                        }
+
+                    }
+                    i++;
+                }
+
+
+                //Nullokra a maradékot
+                if (item.getAmount() > 0) {
+                    i = 0;
+                    for ( AbstractItem abstractItem : inventory ) {
+
+                        i++;
+                    }
+                }
+            }
+
+        }
+
+        return false;
+    }
+
+    /*
+    @Override
+    public boolean addItem(AbstractItem item) {
+
+        if (item.getType() != ItemType.FIRE && item.getType() != null) {
+            //Stackable
             if (Arrays.asList(stackable).contains(item.getType())) {
 
                 int i = 0;
@@ -72,23 +138,27 @@ public class Inventory implements BaseInventory {
 
                     return item.getAmount() == 0;
                 }
-
+            //Equipable
             } else {
                 if (emptySlots() > 0) {
                     int i = 0;
                     for (AbstractItem ai : inventory) {
                         if (ai == null) {
                             inventory[i] = item;
-                            return true;
+                            inventory[i].setAmount(1);
+                            item.setAmount(item.getAmount() - 1);
                         }
                         i++;
                     }
+
+                    return item.getAmount() == 0;
                 }
             }
         }
 
         return false;
     }
+     */
 
     @Override
     public AbstractItem dropItem(int index) {
