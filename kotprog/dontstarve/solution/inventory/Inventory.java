@@ -70,22 +70,36 @@ public class Inventory implements BaseInventory {
                             inventory[i].setAmount(inventory[i].getAmount() + item.getAmount());
                             item.setAmount(0);
                         } else {
-
+                            inventory[i].setAmount(inventory[i].getMaxAmount());
+                            item.setAmount(item.getAmount() - db);
                         }
-
                     }
                     i++;
                 }
 
-
                 //Nullokra a maradékot
-                if (item.getAmount() > 0) {
+                if (item.getAmount() == 0) {
+                    return true;
+                } else {
                     i = 0;
                     for ( AbstractItem abstractItem : inventory ) {
-
+                        if (item.getAmount() == 0) {
+                            return true;
+                        }
+                        if (abstractItem == null) {
+                            if (item.getAmount() > item.getMaxAmount()) {
+                                inventory[i] = item;
+                                inventory[i].setAmount(item.getMaxAmount());
+                                item.setAmount(item.getAmount() - item.getMaxAmount());
+                            } else {
+                                inventory[i] = item;
+                                return true;
+                            }
+                        }
                         i++;
                     }
                 }
+                return item.getAmount() == 0;
             }
 
         }
