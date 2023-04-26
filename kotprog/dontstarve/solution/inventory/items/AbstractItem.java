@@ -3,7 +3,7 @@ package prog1.kotprog.dontstarve.solution.inventory.items;
 /**
  * Egy általános itemet leíró osztály.
  */
-public abstract class AbstractItem {
+public abstract class AbstractItem implements Cloneable {
     /**
      * Az item típusa.
      * @see ItemType
@@ -58,6 +58,15 @@ public abstract class AbstractItem {
             default -> {
                 return 1;
             }
+        }
+    }
+
+    @Override
+    public AbstractItem clone() {
+        try {
+            return (AbstractItem) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
         }
     }
 }

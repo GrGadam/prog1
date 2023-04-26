@@ -43,10 +43,10 @@ public class Inventory implements BaseInventory {
                     int i = 0;
                     for (AbstractItem abstractItem : inventory) {
                         if (item.getAmount() == 0) {
-                            break;
+                            return true;
                         }
                         if (abstractItem == null) {
-                            inventory[i] = item;
+                            inventory[i] = item.clone();
                             inventory[i].setAmount(1);
                             item.setAmount(item.getAmount() - 1);
                         }
@@ -70,7 +70,7 @@ public class Inventory implements BaseInventory {
                             inventory[i].setAmount(inventory[i].getAmount() + item.getAmount());
                             item.setAmount(0);
                         } else {
-                            inventory[i].setAmount(inventory[i].getMaxAmount());
+                            inventory[i].setAmount(item.getMaxAmount());
                             item.setAmount(item.getAmount() - db);
                         }
                     }
@@ -78,100 +78,30 @@ public class Inventory implements BaseInventory {
                 }
 
                 //Nullokra a maradékot
-                if (item.getAmount() == 0) {
-                    return true;
-                } else {
-                    i = 0;
-                    for (AbstractItem abstractItem : inventory) {
-                        if (item.getAmount() == 0) {
+                i = 0;
+                for (AbstractItem abstractItem : inventory) {
+                    if (item.getAmount() == 0) {
+                        return true;
+                    }
+                    if (abstractItem == null) {
+                        if (item.getAmount() > item.getMaxAmount()) {
+                            inventory[i] = item.clone();
+                            inventory[i].setAmount(inventory[i].getMaxAmount());
+                            item.setAmount(item.getAmount() - item.getMaxAmount());
+                        } else {
+                            inventory[i] = item;
                             return true;
                         }
-                        if (abstractItem == null) {
-                            if (item.getAmount() > item.getMaxAmount()) {
-                                inventory[i] = item;
-                                inventory[i].setAmount(item.getMaxAmount());
-                                item.setAmount(item.getAmount() - item.getMaxAmount());
-                            } else {
-                                inventory[i] = item;
-                                return true;
-                            }
-                        }
-                        i++;
                     }
+                    i++;
                 }
+
                 return item.getAmount() == 0;
             }
         }
 
         return false;
     }
-
-    /*
-    @Override
-    public boolean addItem(AbstractItem item) {
-
-        if (item.getType() != ItemType.FIRE && item.getType() != null) {
-            //Stackable
-            if (Arrays.asList(stackable).contains(item.getType())) {
-
-                int i = 0;
-                for (AbstractItem abstractItem : inventory) {
-                    if (abstractItem != null && abstractItem.getType().equals(item.getType())) {
-                        if (abstractItem.getAmount() < abstractItem.getMaxAmount()) {
-                            int db = abstractItem.getMaxAmount() - abstractItem.getAmount();
-                            if (db < item.getAmount()) {
-                                item.setAmount(item.getAmount() - db);
-                                inventory[i].setAmount(inventory[i].getAmount() + db);
-                            } else {
-                                inventory[i].setAmount(inventory[i].getAmount() + item.getAmount());
-                                item.setAmount(0);
-                            }
-                        }
-                    }
-                    i++;
-                }
-
-                if (item.getAmount() == 0) {
-                    return true;
-                } else if (emptySlots() > 0) {
-                    i = 0;
-                    for (AbstractItem abstractItem : inventory) {
-                        if (abstractItem == null) {
-                            if (item.getAmount() > item.getMaxAmount()) {
-                                item.setAmount(item.getAmount() - item.getMaxAmount());
-                                inventory[i] = item;
-                                inventory[i].setAmount(inventory[i].getMaxAmount());
-                            } else {
-                                inventory[i] = item;
-                                return true;
-                            }
-                        }
-                        i++;
-                    }
-
-                    return item.getAmount() == 0;
-                }
-            //Equipable
-            } else {
-                if (emptySlots() > 0) {
-                    int i = 0;
-                    for (AbstractItem ai : inventory) {
-                        if (ai == null) {
-                            inventory[i] = item;
-                            inventory[i].setAmount(1);
-                            item.setAmount(item.getAmount() - 1);
-                        }
-                        i++;
-                    }
-
-                    return item.getAmount() == 0;
-                }
-            }
-        }
-
-        return false;
-    }
-     */
 
     @Override
     public AbstractItem dropItem(int index) {

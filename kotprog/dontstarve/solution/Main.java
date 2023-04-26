@@ -357,25 +357,30 @@ public class Main {
         }
          */
 
-        Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().addItem(new ItemLog(6));
-        Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().moveItem(0, 3);
 
+        ((Inventory)Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory()).addItemToIndex(3, new ItemLog(6));
         ((Inventory)Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory()).addItemToIndex(5, new ItemLog(6));
 
         try {
             System.out.println("    11. test:");
-            int i = 100;
-            while (i > 0) {
-                if (!(Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().addItem(new ItemLog(6)))) {
-                    System.out.println("Could not add item, inv max");
-                } else {
-                    printInventory("player");
-                }
-                i--;
-            }
-            System.out.println("✓ 11. Successfully added 100x6db log to player inventory");
+            printInventory("player");
+            Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().addItem(new ItemLog(100));
+            printInventory("player");
+            System.out.println("✓ 11. Successfully added 100db log to player inventory");
         } catch (Exception ex) {
-            System.out.println("! --> 11. Error while adding 100x6db log to player inventory");
+            System.out.println("! --> 11. Error while adding 100db log to player inventory");
+        }
+
+        try {
+            System.out.println("    12. test:");
+            printInventory("player");
+            ItemAxe axes = new ItemAxe();
+            axes.setAmount(20);
+            Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().addItem(axes);
+            printInventory("player");
+            System.out.println("✓ 11. Successfully added 20db AXE to player inventory");
+        } catch (Exception ex) {
+            System.out.println("! --> 11. Error while adding 20db AXE log to player inventory");
         }
 
     }

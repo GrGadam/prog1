@@ -122,7 +122,7 @@ public final class GameManager {
     }
 
     private AbstractItem getRandomMaterial() {
-        int rand = random.nextInt(5);
+        int rand = random.nextInt(0, 4);
         return switch (rand) {
             case 0 -> new ItemLog(1);
             case 1 -> new ItemStone(1);
