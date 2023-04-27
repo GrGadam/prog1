@@ -134,25 +134,23 @@ public final class GameManager {
     }
 
     private Position calculateStartingPosition(String name) {
-        int sor = -1;
-        int oszlop = -1;
         int radius = 50;
 
         for (int r = 0; r < 9; r++) {
-            for (int x = 0; x < level.getHeight(); x++) {
-                for (int y = 0; y < getLevel().getWidth(); y++) {
+            for (int sor = 0; sor < level.getHeight(); sor++) {
+                for (int oszlop = 0; oszlop < getLevel().getWidth(); oszlop++) {
 
                     boolean occupied = false;
                     for (Position p : getCharacterPositions()) {
-                        if (p.getX() == x && p.getY() == y) {
+                        if (p.getX() == oszlop && p.getY() == sor) {
                             occupied = true;
                             break;
                         }
                     }
 
-                    if (fields[x][y].isWalkable() && !occupied) {
-                        if (checkRadius(x, y, radius)) {
-                            return new Position(x, y);
+                    if (fields[sor][oszlop].isWalkable() && !occupied) {
+                        if (checkRadius(sor, oszlop, radius)) {
+                            return new Position(oszlop, sor);
                         }
                     }
                 }
@@ -160,7 +158,7 @@ public final class GameManager {
             radius -= 5;
         }
 
-        return new Position(sor, oszlop);
+        return new Position(Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
 
     /*
@@ -179,7 +177,7 @@ public final class GameManager {
             int x = ((int) pos.getX());
             int y = ((int) pos.getY());
 
-            if (radius * radius > ((sor - x) * (sor - x) + (oszlop - y) * (oszlop - y))) {
+            if (radius * radius > ((sor - y) * (sor - y) + (oszlop - x) * (oszlop - x))) {
                 return false;
             }
         }
