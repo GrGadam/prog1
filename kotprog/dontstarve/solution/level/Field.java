@@ -103,7 +103,7 @@ public class Field implements BaseField {
 
     //Csökkenti a mező értékét, ha elfogy az élete akkor áralakítja üres mezővé és az itemek közé adja az itemeket
     //false ha nem lett az életerő 0
-    public boolean gather() {
+    public void gather() {
         if (health != 0) {
             health--;
         }
@@ -122,11 +122,7 @@ public class Field implements BaseField {
             }
 
             hex = "#32C832";
-
-            return true;
         }
-
-        return false;
     }
 
 }

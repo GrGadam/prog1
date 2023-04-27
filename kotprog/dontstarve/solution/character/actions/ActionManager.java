@@ -108,16 +108,8 @@ public class ActionManager {
         else if (field.hasStone() && character.getInventory().equippedItem().equals(new ItemPickaxe())) {
             field.gather();
         }
-        //Twig
-        else if (field.hasTwig()) {
-            field.gather();
-        }
-        //Berry
-        else if (field.hasBerry()) {
-            field.gather();
-        }
-        //Carrot
-        else if (field.hasCarrot()) {
+        //Twig, Berry, Carrot
+        else if (field.hasTwig() || field.hasBerry() || field.hasCarrot()) {
             field.gather();
         }
 
@@ -141,6 +133,7 @@ public class ActionManager {
                 }
             }
         }
+        return null;
     }
 
     private void attack() {
