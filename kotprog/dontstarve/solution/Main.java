@@ -427,10 +427,16 @@ public class Main {
         printInventory("player");
         ItemAxe axes = new ItemAxe();
         Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().addItem(new ItemStone(100));
+        /*
         printInventory("player");
         Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().removeItem(ItemType.STONE, 90);
         printInventory("player");
+         */
 
+        System.out.println(Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().equippedItem());
+        Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().addItem(new ItemStone(100));
+        printInventory("player");
+        System.out.println(Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().unequipItem());
     }
 
 }

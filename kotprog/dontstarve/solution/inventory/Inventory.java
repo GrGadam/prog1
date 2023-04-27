@@ -234,7 +234,7 @@ public class Inventory implements BaseInventory {
     @Override
     public boolean equipItem(int index) {
 
-        if (inventory[index] != null) {
+        if (index >= 0 && index < 10 && inventory[index] != null) {
             if (Arrays.asList(equippable).contains(inventory[index].getType())) {
                 if (equippedItem != null) {
                     EquippableItem tmp = equippedItem;
@@ -257,13 +257,16 @@ public class Inventory implements BaseInventory {
         if (equippedItem != null) {
             if (emptySlots() == 0) {
                 Position p = Objects.requireNonNull(GameManager.getInstance().getCharacter(characterName)).getCurrentPosition().getNearestWholePosition();
-                ((Field) GameManager.getInstance().getField(((int) p.getX()), ((int) p.getY()))).addItem(equippedItem);
+                ((Field) Objects.requireNonNull(GameManager.getInstance().getField(((int) p.getX()), ((int) p.getY())))).addItem(equippedItem);
+                EquippableItem i = (EquippableItem) equippedItem.clone();
                 equippedItem = null;
+                return i;
             } else {
                 for (int i = 0; i < inventory.length; i++) {
                     if (inventory[i] == null) {
-                        inventory[i] = equippedItem;
+                        inventory[i] = equippedItem.clone();
                         equippedItem = null;
+                        return null;
                     }
                 }
             }
