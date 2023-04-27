@@ -2,6 +2,8 @@ package prog1.kotprog.dontstarve.solution.character.actions;
 
 import prog1.kotprog.dontstarve.solution.GameManager;
 import prog1.kotprog.dontstarve.solution.character.Character;
+import prog1.kotprog.dontstarve.solution.inventory.items.*;
+import prog1.kotprog.dontstarve.solution.level.Field;
 import prog1.kotprog.dontstarve.solution.utility.Position;
 
 import java.util.Objects;
@@ -10,9 +12,9 @@ public class ActionManager {
     private Action action;
     private Character character;
 
-    public ActionManager(Action action, Character character) {
+    public ActionManager(Action action, String name) {
         this.action = action;
-        this.character = character;
+        this.character = (Character) GameManager.getInstance().getCharacter(name);
     }
 
     public void start() {
@@ -93,7 +95,29 @@ public class ActionManager {
     }
 
     private void interact() {
-        ActionInteract actionInteract = (ActionInteract) this.action;
+        Position position = character.getCurrentPosition().getNearestWholePosition();
+        Field field = (Field) GameManager.getInstance().getField((int) position.getX(), (int) position.getY());
+
+        //Tree and has axe
+        if (field.hasTree() && character.getInventory().equippedItem().equals(new ItemAxe())) {
+            Objects.requireNonNull(GameManager.getInstance().getCharacter(character.getName())).getInventory().addItem(new ItemLog(1));
+        }
+        //Stone and has pickaxe
+        else if (field.hasStone() && character.getInventory().equippedItem().equals(new ItemPickaxe())) {
+            Objects.requireNonNull(GameManager.getInstance().getCharacter(character.getName())).getInventory().addItem(new ItemStone(1));
+        }
+        //Twig
+        else if (field.hasTwig()) {
+            Objects.requireNonNull(GameManager.getInstance().getCharacter(character.getName())).getInventory().addItem(new ItemTwig(1));
+        }
+        //Twig
+        else if (field.hasBerry()) {
+            Objects.requireNonNull(GameManager.getInstance().getCharacter(character.getName())).getInventory().addItem(new ItemRawBerry(1));
+        }
+        //Twig
+        else if (field.hasCarrot()) {
+            Objects.requireNonNull(GameManager.getInstance().getCharacter(character.getName())).getInventory().addItem(new ItemRawCarrot(1));
+        }
 
         setLastAction();
     }
@@ -108,10 +132,82 @@ public class ActionManager {
 
     private void craft() {
         ActionCraft actionCraft = (ActionCraft) this.action;
+        Position p = character.getCurrentPosition();
+
+        switch (actionCraft.getItemType()) {
+            case AXE -> {
+                if (character.getInventory().removeItem(ItemType.TWIG, 3)) {
+                    if (!character.getInventory().addItem(new ItemAxe())) {
+                        ((Field) Objects.requireNonNull(GameManager.getInstance().getField((int) p.getX(), (int) p.getY()))).addItem(new ItemAxe());
+                    }
+                }
+            }
+            case PICKAXE -> {
+                if (character.getInventory().removeItem(ItemType.LOG, 2) && character.getInventory().removeItem(ItemType.TWIG, 2)) {
+                    if (!character.getInventory().addItem(new ItemPickaxe())) {
+                        ((Field) Objects.requireNonNull(GameManager.getInstance().getField((int) p.getX(), (int) p.getY()))).addItem(new ItemPickaxe());
+                    }
+                }
+            }
+            case SPEAR -> {
+                if (character.getInventory().removeItem(ItemType.LOG, 2) && character.getInventory().removeItem(ItemType.STONE, 2)) {
+                    if (!character.getInventory().addItem(new ItemSpear())) {
+                        ((Field) Objects.requireNonNull(GameManager.getInstance().getField((int) p.getX(), (int) p.getY()))).addItem(new ItemSpear());
+                    }
+                }
+            }
+            case TORCH -> {
+                if (character.getInventory().removeItem(ItemType.LOG, 1) && character.getInventory().removeItem(ItemType.TWIG, 3)) {
+                    if (!character.getInventory().addItem(new ItemTorch())) {
+                        ((Field) Objects.requireNonNull(GameManager.getInstance().getField((int) p.getX(), (int) p.getY()))).addItem(new ItemTorch());
+                    }
+                }
+            }
+            case FIRE -> {
+                if (character.getInventory().removeItem(ItemType.TWIG, 2) && character.getInventory().removeItem(ItemType.LOG, 2) && character.getInventory().removeItem(ItemType.STONE, 4)) {
+                    if (((Field) Objects.requireNonNull(GameManager.getInstance().getField((int) p.getX(), (int) p.getY()))).isEmpty()) {
+                        ((Field) Objects.requireNonNull(GameManager.getInstance().getField((int) p.getX(), (int) p.getY()))).setFire();
+                    } else {
+                        character.getInventory().addItem(new ItemTwig(2));
+                        character.getInventory().addItem(new ItemLog(2));
+                        character.getInventory().addItem(new ItemStone(4));
+                    }
+                }
+            }
+        }
+
         setLastAction();
     }
 
     private void collectItem() {
+        Position position = character.getCurrentPosition().getNearestWholePosition();
+        Field field = (Field) GameManager.getInstance().getField((int) position.getX(), (int) position.getY());
+
+        if (field.items() != null) {
+            int i = 0;
+            for (AbstractItem abstractItem : field.items()) {
+                if (abstractItem != null) {
+                    //Equipable
+                    if (abstractItem instanceof EquippableItem) {
+                        if (Objects.requireNonNull(GameManager.getInstance().getCharacter(character.getName())).getInventory().addItem(abstractItem)) {
+                            field.removeItem(i);
+                        }
+                    }
+                    //Stackable
+                    else {
+                        if (Objects.requireNonNull(GameManager.getInstance().getCharacter(character.getName())).getInventory().addItem(abstractItem)) {
+                            field.removeItem(i);
+                        } else {
+                            field.removeItem(i);
+                            field.addItem(abstractItem);
+                        }
+                    }
+                }
+                i++;
+            }
+        }
+
+
         setLastAction();
     }
 
@@ -123,7 +219,27 @@ public class ActionManager {
 
     private void eat() {
         ActionEat actionEat = (ActionEat) this.action;
-        Objects.requireNonNull(GameManager.getInstance().getCharacter(character.getName())).getInventory().eatItem(actionEat.getIndex());
+        Character c = (Character) GameManager.getInstance().getCharacter(character.getName());
+
+        switch (Objects.requireNonNull(GameManager.getInstance().getCharacter(character.getName())).getInventory().eatItem(actionEat.getIndex())) {
+            case RAW_BERRY -> {
+                c.setHp((int) c.getHp() - 5);
+                c.setHunger((int) c.getHunger() + 20);
+            }
+            case RAW_CARROT -> {
+                c.setHp((int) c.getHp() + 1);
+                c.setHunger((int) c.getHunger() + 12);
+            }
+            case COOKED_BERRY -> {
+                c.setHp((int) c.getHp() + 1);
+                c.setHunger((int) c.getHunger() + 10);
+            }
+            case COOKED_CARROT -> {
+                c.setHp((int) c.getHp() + 3);
+                c.setHunger((int) c.getHunger() + 10);
+            }
+        }
+
         setLastAction();
     }
 

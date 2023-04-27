@@ -300,8 +300,10 @@ public final class GameManager {
 
         if (gameStarted && !gameEnded) {
             //player
-            ActionManager actionManager = new ActionManager(action, getPlayer());
-            actionManager.start();
+            if (hasPlayer) {
+                ActionManager actionManager = new ActionManager(action, getPlayer().getName());
+                actionManager.start();
+            }
 
             //bots
             if (!tutorial) {

@@ -78,6 +78,10 @@ public class Field implements BaseField {
         return false;
     }
 
+    public void removeItem(int index) {
+        items.remove(index);
+    }
+
     public void setColor(int color) {
         this.hex = String.format("#%06X", (0xFFFFFF & color));
     }
