@@ -88,24 +88,24 @@ public final class GameManager {
      */
     public Position joinCharacter(String name, boolean player) {
 
-        if (!gameStarted) {
-            if (isLevelLoaded) {
-                if (getCharacter(name) == null) {
-                    if (player && !hasPlayer) {
-                        Character c = new Character(name, true);
-                        c.setPosition(calculateStartingPosition(name));
-                        characters.add(c);
-                        hasPlayer = true;
-                        addRandomMaterials(name);
-                        return c.getCurrentPosition();
-                    } else if (!player) {
-                        Character c = new Character(name, false);
-                        c.setPosition(calculateStartingPosition(name));
-                        characters.add(c);
-                        addRandomMaterials(name);
-                        return c.getCurrentPosition();
-                    }
-                }
+        if (gameStarted || !isLevelLoaded || name == null || name.equals("")) {
+            return new Position(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        }
+
+        if (getCharacter(name) == null) {
+            if (player && !hasPlayer) {
+                Character c = new Character(name, true);
+                c.setPosition(calculateStartingPosition(name));
+                characters.add(c);
+                hasPlayer = true;
+                addRandomMaterials(name);
+                return c.getCurrentPosition();
+            } else if (!player) {
+                Character c = new Character(name, false);
+                c.setPosition(calculateStartingPosition(name));
+                characters.add(c);
+                addRandomMaterials(name);
+                return c.getCurrentPosition();
             }
 
         }
