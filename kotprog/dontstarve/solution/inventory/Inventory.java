@@ -119,30 +119,64 @@ public class Inventory implements BaseInventory {
 
     @Override
     public boolean removeItem(ItemType type, int amount) {
+        //null és fire check
+        if (type == null || type == ItemType.FIRE) {
+            return false;
+        }
+
         int elerhetoMennyiseg = 0;
         for (AbstractItem item : inventory) {
-            if (item.getType().equals(type)) {
+            if (item != null && item.getType().equals(type)) {
                 elerhetoMennyiseg += item.getAmount();
             }
         }
 
-        if (elerhetoMennyiseg >= amount) {
-            int i = 0;
+        //Van-e elég check
+        if (elerhetoMennyiseg < amount) {
+            return false;
+        }
+
+        //Stackable
+        int i = 0;
+        if (Arrays.asList(stackable).contains(type)) {
             for (AbstractItem item : inventory) {
-                if (amount > 0) {
-                    if (item.getType().equals(type)) {
-                        if (item.getAmount() <= amount) {
-                            amount -= item.getMaxAmount();
-                            inventory[i] = null;
-                        } else {
-                            inventory[i].setAmount(inventory[i].getAmount() - amount);
-                            return true;
-                        }
+                if (amount == 0) {
+                    return true;
+                }
+
+                if (item != null && item.getType().equals(type)) {
+
+                    //Kevesebb mint a törlendő
+                    if (item.getAmount() < amount) {
+                        amount -= item.getAmount();
+                        inventory[i] = null;
                     }
+                    //Több mint törlendő
+                    else if (item.getAmount() > amount) {
+                        inventory[i].setAmount(inventory[i].getAmount() - amount);
+                        return true;
+                    } else {
+                        inventory[i] = null;
+                        return true;
+                    }
+
+                }
+
+                i++;
+            }
+        }
+        //Equippable
+        else {
+            for (AbstractItem item : inventory) {
+                if (amount == 0) {
+                    return true;
+                }
+                if (item != null && item.getType().equals(type)) {
+                    inventory[i] = null;
+                    amount--;
                 }
                 i++;
             }
-            return true;
         }
 
         return false;

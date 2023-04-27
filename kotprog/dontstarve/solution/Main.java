@@ -2,9 +2,7 @@ package prog1.kotprog.dontstarve.solution;
 
 import prog1.kotprog.dontstarve.solution.character.Character;
 import prog1.kotprog.dontstarve.solution.inventory.Inventory;
-import prog1.kotprog.dontstarve.solution.inventory.items.AbstractItem;
-import prog1.kotprog.dontstarve.solution.inventory.items.ItemAxe;
-import prog1.kotprog.dontstarve.solution.inventory.items.ItemLog;
+import prog1.kotprog.dontstarve.solution.inventory.items.*;
 import prog1.kotprog.dontstarve.solution.level.Field;
 import prog1.kotprog.dontstarve.solution.level.Level;
 import prog1.kotprog.dontstarve.solution.utility.Position;
@@ -357,10 +355,51 @@ public class Main {
         }
          */
 
-
+        /*
+        ((Inventory)Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory()).addItemToIndex(0, new ItemTwig(3));
         ((Inventory)Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory()).addItemToIndex(3, new ItemLog(6));
-        ((Inventory)Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory()).addItemToIndex(5, new ItemLog(6));
+        ((Inventory)Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory()).addItemToIndex(5, new ItemRawBerry(6));
+        ((Inventory)Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory()).addItemToIndex(7, new ItemStone(6));
+        ((Inventory)Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory()).addItemToIndex(7, new ItemStone(6));
 
+        try {
+            System.out.println("    11. test:");
+            printInventory("player");
+            Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().addItem(new ItemLog(17));
+            printInventory("player");
+            Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().addItem(new ItemRawBerry(17));
+            printInventory("player");
+            Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().addItem(new ItemStone(17));
+            printInventory("player");
+
+            ItemTwig twigs = new ItemTwig(100);
+            Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().addItem(twigs);
+            printInventory("player");
+            System.out.println("Megmaradt: " + twigs.getAmount());
+            System.out.println("✓ 11. Successfully added 100db log to player inventory");
+        } catch (Exception ex) {
+            System.out.println("! --> 11. Error while adding 100db log to player inventory");
+        }
+
+        try {
+            System.out.println("    12. test:");
+            printInventory("player");
+            if(Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().removeItem(ItemType.LOG, 23)) {
+                System.out.println("12. törölve");
+            } else {
+                System.out.println("12. Nincs törölve");
+            }
+            printInventory("player");
+            Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().removeItem(ItemType.TWIG, 40);
+            Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().removeItem(ItemType.STONE, 23);
+        } catch (Exception ex) {
+            System.out.println("! --> 12. Error while removing items");
+            System.out.println(ex);
+        }
+
+         */
+
+        /*
         try {
             System.out.println("    11. test:");
             printInventory("player");
@@ -382,6 +421,15 @@ public class Main {
         } catch (Exception ex) {
             System.out.println("! --> 11. Error while adding 20db AXE log to player inventory");
         }
+
+         */
+
+        printInventory("player");
+        ItemAxe axes = new ItemAxe();
+        Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().addItem(new ItemStone(100));
+        printInventory("player");
+        Objects.requireNonNull(GameManager.getInstance().getCharacter("player")).getInventory().removeItem(ItemType.STONE, 90);
+        printInventory("player");
 
     }
 
