@@ -1,6 +1,6 @@
 package prog1.kotprog.dontstarve.solution.level;
 
-import prog1.kotprog.dontstarve.solution.inventory.items.AbstractItem;
+import prog1.kotprog.dontstarve.solution.inventory.items.*;
 
 import java.util.ArrayList;
 
@@ -9,10 +9,21 @@ public class Field implements BaseField {
     private ArrayList<AbstractItem> items;
     private boolean hasFire;
     private String hex;
+    private int health;
 
     public Field() {
         items = new ArrayList<>();
         hasFire = false;
+
+        if (hasTree()) {
+            health = 4;
+        } else if (hasStone()) {
+            health = 5;
+        } else if (hasTwig()) {
+            health = 2;
+        } else if (hasBerry() || hasCarrot()) {
+            health = 1;
+        }
     }
 
     @Override
@@ -88,6 +99,34 @@ public class Field implements BaseField {
 
     public String getHex() {
         return hex;
+    }
+
+    //Csökkenti a mező értékét, ha elfogy az élete akkor áralakítja üres mezővé és az itemek közé adja az itemeket
+    //false ha nem lett az életerő 0
+    public boolean gather() {
+        if (health != 0) {
+            health--;
+        }
+
+        if (health == 0) {
+            if (hasTree()) {
+                items.add(new ItemLog(1));
+            } else if (hasStone()) {
+                items.add(new ItemStone(1));
+            } else if (hasTwig()) {
+                items.add(new ItemTwig(1));
+            } else if (hasBerry()) {
+                items.add(new ItemRawBerry(1));
+            } else if (hasCarrot()) {
+                items.add(new ItemRawCarrot(1));
+            }
+
+            hex = "#32C832";
+
+            return true;
+        }
+
+        return false;
     }
 
 }

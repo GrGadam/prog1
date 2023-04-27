@@ -14,6 +14,7 @@ public class Character implements BaseCharacter {
     private Position position;
     private Action lastAction;
     private boolean player;
+    private int actionTime;
 
     public Character(String name, boolean player) {
         this.name = name;
@@ -21,6 +22,7 @@ public class Character implements BaseCharacter {
         this.health = 100;
         this.hunger = 100;
         this.player = player;
+        this.actionTime = 0;
     }
 
     @Override
@@ -98,5 +100,13 @@ public class Character implements BaseCharacter {
 
     public boolean isPlayer() {
         return player;
+    }
+
+    public int getActionTime() {
+        return this.actionTime;
+    }
+
+    public void setActionTime(int actionTime) {
+        this.actionTime = actionTime;
     }
 }

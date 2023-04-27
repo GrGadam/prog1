@@ -1,11 +1,13 @@
 package prog1.kotprog.dontstarve.solution.character.actions;
 
 import prog1.kotprog.dontstarve.solution.GameManager;
+import prog1.kotprog.dontstarve.solution.character.BaseCharacter;
 import prog1.kotprog.dontstarve.solution.character.Character;
 import prog1.kotprog.dontstarve.solution.inventory.items.*;
 import prog1.kotprog.dontstarve.solution.level.Field;
 import prog1.kotprog.dontstarve.solution.utility.Position;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class ActionManager {
@@ -100,29 +102,50 @@ public class ActionManager {
 
         //Tree and has axe
         if (field.hasTree() && character.getInventory().equippedItem().equals(new ItemAxe())) {
-            Objects.requireNonNull(GameManager.getInstance().getCharacter(character.getName())).getInventory().addItem(new ItemLog(1));
+            field.gather();
         }
         //Stone and has pickaxe
         else if (field.hasStone() && character.getInventory().equippedItem().equals(new ItemPickaxe())) {
-            Objects.requireNonNull(GameManager.getInstance().getCharacter(character.getName())).getInventory().addItem(new ItemStone(1));
+            field.gather();
         }
         //Twig
         else if (field.hasTwig()) {
-            Objects.requireNonNull(GameManager.getInstance().getCharacter(character.getName())).getInventory().addItem(new ItemTwig(1));
+            field.gather();
         }
-        //Twig
+        //Berry
         else if (field.hasBerry()) {
-            Objects.requireNonNull(GameManager.getInstance().getCharacter(character.getName())).getInventory().addItem(new ItemRawBerry(1));
+            field.gather();
         }
-        //Twig
+        //Carrot
         else if (field.hasCarrot()) {
-            Objects.requireNonNull(GameManager.getInstance().getCharacter(character.getName())).getInventory().addItem(new ItemRawCarrot(1));
+            field.gather();
         }
 
         setLastAction();
     }
 
+    private BaseCharacter scanForAttack() {
+        ArrayList<Character> characters = GameManager.getInstance().getCharacters();
+        int sor = (int) character.getCurrentPosition().getY();
+        int oszlop = (int) character.getCurrentPosition().getX();
+
+        for (int i = sor - 1; i < sor + 1; i++) {
+            for (int j = oszlop - 1; j < sor - 1; j++) {
+                for (Character c : characters) {
+                    if (!c.getName().equals(character.getName())) {
+                        Position position = c.getCurrentPosition().getNearestWholePosition();
+                        if ((int) position.getX() == i && (int) position.getY() == j) {
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private void attack() {
+
+
         setLastAction();
     }
 
