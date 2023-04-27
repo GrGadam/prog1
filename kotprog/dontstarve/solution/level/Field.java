@@ -11,9 +11,10 @@ public class Field implements BaseField {
     private String hex;
     private int health;
 
-    public Field() {
-        items = new ArrayList<>();
-        hasFire = false;
+    public Field(int color) {
+        this.items = new ArrayList<>();
+        this.hasFire = false;
+        this.hex = String.format("#%06X", (0xFFFFFF & color));
 
         if (hasTree()) {
             health = 4;
@@ -91,10 +92,6 @@ public class Field implements BaseField {
 
     public void removeItem(int index) {
         items.remove(index);
-    }
-
-    public void setColor(int color) {
-        this.hex = String.format("#%06X", (0xFFFFFF & color));
     }
 
     public String getHex() {

@@ -237,8 +237,7 @@ public final class GameManager {
 
             for (int sor = 0; sor < level.getHeight(); sor++) {
                 for (int oszlop = 0; oszlop < level.getWidth(); oszlop++) {
-                    Field field = new Field();
-                    field.setColor(level.getColor(oszlop, sor));
+                    Field field = new Field(level.getColor(oszlop, sor));
                     fields[sor][oszlop] = field;
                 }
             }
