@@ -312,7 +312,7 @@ public final class GameManager {
             //HP, Hunger, Fire, Torch lekezelése
             //HP és Hunger
             for (Character character : characters) {
-                //ha Hunger >= 0.4 akkor még le tudjuk vooni
+                //ha Hunger >= 0.4 akkor még le tudjuk vonni
                 if (character.getHunger() >= 0.4) {
                     //Ha Hunger > 100 akkor levonjuk majd 100-ra állítjuk
                     character.setHunger(character.getHunger() - 0.4f);
@@ -333,12 +333,15 @@ public final class GameManager {
                     }
                 }
             }
+
             //Torch
             for (Character character : characters) {
                 Inventory inventory = (Inventory) character.getInventory();
-                if (inventory.equippedItem().getType().equals(ItemType.TORCH)) {
-                    if(((ItemTorch)inventory.equippedItem()).tick()) {
-                        inventory.setEquippedItem(null);
+                if (inventory.equippedItem() != null) {
+                    if (inventory.equippedItem().getType().equals(ItemType.TORCH)) {
+                        if(((ItemTorch)inventory.equippedItem()).tick()) {
+                            inventory.setEquippedItem(null);
+                        }
                     }
                 }
             }
