@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Field implements BaseField {
 
-    private ArrayList<AbstractItem> items;
+    private final ArrayList<AbstractItem> items;
     private boolean hasFire;
     private String hex;
     private int health;

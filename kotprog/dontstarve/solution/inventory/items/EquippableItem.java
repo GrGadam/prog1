@@ -1,7 +1,5 @@
 package prog1.kotprog.dontstarve.solution.inventory.items;
 
-import prog1.kotprog.dontstarve.solution.exceptions.NotImplementedException;
-
 /**
  * Felvehető / kézbe vehető item leírására szolgáló osztály.
  */

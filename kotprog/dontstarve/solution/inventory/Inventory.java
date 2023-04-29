@@ -7,16 +7,13 @@ import prog1.kotprog.dontstarve.solution.inventory.items.ItemType;
 import prog1.kotprog.dontstarve.solution.level.Field;
 import prog1.kotprog.dontstarve.solution.utility.Position;
 
-import java.nio.file.attribute.AttributeView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static java.util.Objects.isNull;
-
 public class Inventory implements BaseInventory {
 
-    private AbstractItem[] inventory = new AbstractItem[10];
+    private final AbstractItem[] inventory = new AbstractItem[10];
     private EquippableItem equippedItem = null;
     private String characterName = null;
 

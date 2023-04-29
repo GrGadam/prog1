@@ -25,7 +25,7 @@ public final class GameManager {
     private boolean isLevelLoaded = false;
     private Level level;
     private Field[][] fields;
-    private ArrayList<Character> characters;
+    private final ArrayList<Character> characters;
     /**
      * Van-e már 1 db csatlakozott játékos aki nem bot
      */
@@ -39,7 +39,7 @@ public final class GameManager {
     /**
      * Az osztályból létrehozott egyetlen példány (nem lehet final).
      */
-    private static GameManager instance = new GameManager();
+    private static final GameManager instance = new GameManager();
 
     /**
      * Random objektum, amit a játék során használni lehet.
@@ -116,7 +116,7 @@ public final class GameManager {
     private void addRandomMaterials(String name) {
         int i = 4;
         while (i > 0) {
-            GameManager.getInstance().getCharacter(name).getInventory().addItem(getRandomMaterial());
+            Objects.requireNonNull(GameManager.getInstance().getCharacter(name)).getInventory().addItem(getRandomMaterial());
             i--;
         }
     }

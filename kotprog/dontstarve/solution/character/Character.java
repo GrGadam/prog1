@@ -7,13 +7,13 @@ import prog1.kotprog.dontstarve.solution.utility.Position;
 
 public class Character implements BaseCharacter {
 
-    private String name;
+    private final String name;
     private float health;
     private float hunger;
-    private Inventory inventory;
+    private final Inventory inventory;
     private Position position;
     private Action lastAction;
-    private boolean player;
+    private final boolean player;
 
     public Character(String name, boolean player) {
         this.name = name;
