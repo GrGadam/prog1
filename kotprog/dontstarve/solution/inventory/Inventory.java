@@ -375,4 +375,8 @@ public class Inventory implements BaseInventory {
         }
     }
 
+    public void setEquippedItem(EquippableItem item) {
+        this.equippedItem = item;
+    }
+
 }

@@ -10,6 +10,7 @@ public class Field implements BaseField {
     private boolean hasFire;
     private String hex;
     private int health;
+    private int fireHealth;
 
     public Field(int color) {
         this.items = new ArrayList<>();
@@ -69,6 +70,7 @@ public class Field implements BaseField {
     public boolean setFire() {
         if (!hasFire) {
             hasFire = true;
+            fireHealth = 60;
             return true;
         }
         return false;
@@ -116,6 +118,19 @@ public class Field implements BaseField {
             return true;
         }
 
+        return false;
+    }
+
+    public boolean tickFire() {
+        if (hasFire) {
+            if (fireHealth > 1) {
+                fireHealth--;
+            } else if (fireHealth == 1) {
+                fireHealth = 0;
+                this.hasFire = false;
+                return true;
+            }
+        }
         return false;
     }
 
