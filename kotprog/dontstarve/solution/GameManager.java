@@ -4,7 +4,6 @@ import prog1.kotprog.dontstarve.solution.character.BaseCharacter;
 import prog1.kotprog.dontstarve.solution.character.Character;
 import prog1.kotprog.dontstarve.solution.character.actions.Action;
 import prog1.kotprog.dontstarve.solution.character.actions.ActionManager;
-import prog1.kotprog.dontstarve.solution.exceptions.NotImplementedException;
 import prog1.kotprog.dontstarve.solution.inventory.items.*;
 import prog1.kotprog.dontstarve.solution.level.BaseField;
 import prog1.kotprog.dontstarve.solution.level.Field;
@@ -12,8 +11,8 @@ import prog1.kotprog.dontstarve.solution.level.Level;
 import prog1.kotprog.dontstarve.solution.utility.Position;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -298,8 +297,16 @@ public final class GameManager {
         if (gameStarted && !gameEnded) {
             //player
             if (hasPlayer) {
+                if (Objects.requireNonNull(getPlayer()).getHunger() >= 0.4) {
+                    getPlayer().setHunger(getPlayer().getHunger() - 0.4f);
+                }
+
                 ActionManager actionManager = new ActionManager(action, getPlayer().getName());
                 actionManager.start();
+
+                if (getPlayer().getHunger() == 0) {
+                    getPlayer().setHp((getPlayer().getHp() - 5));
+                }
             }
 
             //bots

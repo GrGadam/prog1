@@ -8,13 +8,12 @@ import prog1.kotprog.dontstarve.solution.utility.Position;
 public class Character implements BaseCharacter {
 
     private String name;
-    private int health;
-    private int hunger;
+    private float health;
+    private float hunger;
     private Inventory inventory;
     private Position position;
     private Action lastAction;
     private boolean player;
-    private int actionTime;
 
     public Character(String name, boolean player) {
         this.name = name;
@@ -22,7 +21,6 @@ public class Character implements BaseCharacter {
         this.health = 100;
         this.hunger = 100;
         this.player = player;
-        this.actionTime = 0;
     }
 
     @Override
@@ -57,7 +55,7 @@ public class Character implements BaseCharacter {
         return hunger;
     }
 
-    public void setHunger(int hunger) {
+    public void setHunger(float hunger) {
         this.hunger = hunger;
     }
 
@@ -66,7 +64,7 @@ public class Character implements BaseCharacter {
         return health;
     }
 
-    public void setHp(int health) {
+    public void setHp(float health) {
         this.health = health;
     }
 
@@ -100,13 +98,5 @@ public class Character implements BaseCharacter {
 
     public boolean isPlayer() {
         return player;
-    }
-
-    public int getActionTime() {
-        return this.actionTime;
-    }
-
-    public void setActionTime(int actionTime) {
-        this.actionTime = actionTime;
     }
 }

@@ -3,6 +3,7 @@ package prog1.kotprog.dontstarve.solution.character.actions;
 import prog1.kotprog.dontstarve.solution.GameManager;
 import prog1.kotprog.dontstarve.solution.character.BaseCharacter;
 import prog1.kotprog.dontstarve.solution.character.Character;
+import prog1.kotprog.dontstarve.solution.inventory.Inventory;
 import prog1.kotprog.dontstarve.solution.inventory.items.*;
 import prog1.kotprog.dontstarve.solution.level.Field;
 import prog1.kotprog.dontstarve.solution.utility.Position;
@@ -11,8 +12,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class ActionManager {
-    private Action action;
-    private Character character;
+    private final Action action;
+    private final Character character;
 
     public ActionManager(Action action, String name) {
         this.action = action;
@@ -96,11 +97,24 @@ public class ActionManager {
         setLastAction();
     }
 
+
+    //Sikeres gathering esetén megnézi hogy elfér e inventoryba ha nem akkor a filoedhez adja a gatherelt itemet
+    //Duplikátum elkerülés miatt létrehozva
+    private void handleGather(AbstractItem item) {
+        if (character.getInventory().emptySlots() > 0) {
+            character.getInventory().addItem(item);
+        } else {
+            Position p = character.getCurrentPosition().getNearestWholePosition();
+            ((Field) Objects.requireNonNull(GameManager.getInstance().getField((int) p.getX(), (int) p.getY()))).addItem(item);
+        }
+    }
+
     private void interact() {
         Position position = character.getCurrentPosition().getNearestWholePosition();
         Field field = (Field) GameManager.getInstance().getField((int) position.getX(), (int) position.getY());
 
         //Tree and has axe
+        assert field != null;
         if (field.hasTree() && character.getInventory().equippedItem().equals(new ItemAxe())) {
             field.gather();
         }
@@ -109,8 +123,18 @@ public class ActionManager {
             field.gather();
         }
         //Twig, Berry, Carrot
-        else if (field.hasTwig() || field.hasBerry() || field.hasCarrot()) {
-            field.gather();
+        else if (field.hasTwig()) {
+            if (field.gather()) {
+                handleGather(new ItemTwig(1));
+            }
+        } else if (field.hasBerry()) {
+            if (field.gather()) {
+                handleGather(new ItemRawBerry(1));
+            }
+        } else if (field.hasCarrot()) {
+            if (field.gather()) {
+                handleGather(new ItemRawCarrot(1));
+            }
         }
 
         setLastAction();
@@ -146,49 +170,44 @@ public class ActionManager {
         setLastAction();
     }
 
+    private void handleCrafting(AbstractItem itemWantToCraft, ArrayList<AbstractItem> materials) {
+        if (((Inventory) character.getInventory()).hasItems(materials)) {
+            if (!character.getInventory().addItem(itemWantToCraft)) {
+                Position p = character.getCurrentPosition().getNearestWholePosition();
+                ((Field) Objects.requireNonNull(GameManager.getInstance().getField((int) p.getX(), (int) p.getY()))).addItem(itemWantToCraft);
+            }
+        }
+    }
+
     private void craft() {
         ActionCraft actionCraft = (ActionCraft) this.action;
-        Position p = character.getCurrentPosition();
+        ArrayList<AbstractItem> materials = new ArrayList<>();
 
         switch (actionCraft.getItemType()) {
             case AXE -> {
-                if (character.getInventory().removeItem(ItemType.TWIG, 3)) {
-                    if (!character.getInventory().addItem(new ItemAxe())) {
-                        ((Field) Objects.requireNonNull(GameManager.getInstance().getField((int) p.getX(), (int) p.getY()))).addItem(new ItemAxe());
-                    }
-                }
+                materials.add(new ItemTwig(3));
+                handleCrafting(new ItemAxe(), materials);
             }
             case PICKAXE -> {
-                if (character.getInventory().removeItem(ItemType.LOG, 2) && character.getInventory().removeItem(ItemType.TWIG, 2)) {
-                    if (!character.getInventory().addItem(new ItemPickaxe())) {
-                        ((Field) Objects.requireNonNull(GameManager.getInstance().getField((int) p.getX(), (int) p.getY()))).addItem(new ItemPickaxe());
-                    }
-                }
+                materials.add(new ItemLog(2));
+                materials.add(new ItemTwig(2));
+                handleCrafting(new ItemPickaxe(), materials);
             }
             case SPEAR -> {
-                if (character.getInventory().removeItem(ItemType.LOG, 2) && character.getInventory().removeItem(ItemType.STONE, 2)) {
-                    if (!character.getInventory().addItem(new ItemSpear())) {
-                        ((Field) Objects.requireNonNull(GameManager.getInstance().getField((int) p.getX(), (int) p.getY()))).addItem(new ItemSpear());
-                    }
-                }
+                materials.add(new ItemLog(2));
+                materials.add(new ItemStone(2));
+                handleCrafting(new ItemSpear(), materials);
             }
             case TORCH -> {
-                if (character.getInventory().removeItem(ItemType.LOG, 1) && character.getInventory().removeItem(ItemType.TWIG, 3)) {
-                    if (!character.getInventory().addItem(new ItemTorch())) {
-                        ((Field) Objects.requireNonNull(GameManager.getInstance().getField((int) p.getX(), (int) p.getY()))).addItem(new ItemTorch());
-                    }
-                }
+                materials.add(new ItemLog(1));
+                materials.add(new ItemTwig(3));
+                handleCrafting(new ItemTorch(), materials);
             }
             case FIRE -> {
-                if (character.getInventory().removeItem(ItemType.TWIG, 2) && character.getInventory().removeItem(ItemType.LOG, 2) && character.getInventory().removeItem(ItemType.STONE, 4)) {
-                    if (((Field) Objects.requireNonNull(GameManager.getInstance().getField((int) p.getX(), (int) p.getY()))).isEmpty()) {
-                        ((Field) Objects.requireNonNull(GameManager.getInstance().getField((int) p.getX(), (int) p.getY()))).setFire();
-                    } else {
-                        character.getInventory().addItem(new ItemTwig(2));
-                        character.getInventory().addItem(new ItemLog(2));
-                        character.getInventory().addItem(new ItemStone(4));
-                    }
-                }
+                materials.add(new ItemTwig(2));
+                materials.add(new ItemLog(2));
+                materials.add(new ItemStone(4));
+                handleCrafting(new ItemFire(), materials);
             }
         }
 
@@ -199,6 +218,7 @@ public class ActionManager {
         Position position = character.getCurrentPosition().getNearestWholePosition();
         Field field = (Field) GameManager.getInstance().getField((int) position.getX(), (int) position.getY());
 
+        assert field != null;
         if (field.items() != null) {
             int i = 0;
             for (AbstractItem abstractItem : field.items()) {
@@ -239,18 +259,22 @@ public class ActionManager {
 
         switch (Objects.requireNonNull(GameManager.getInstance().getCharacter(character.getName())).getInventory().eatItem(actionEat.getIndex())) {
             case RAW_BERRY -> {
+                assert c != null;
                 c.setHp((int) c.getHp() - 5);
                 c.setHunger((int) c.getHunger() + 20);
             }
             case RAW_CARROT -> {
+                assert c != null;
                 c.setHp((int) c.getHp() + 1);
                 c.setHunger((int) c.getHunger() + 12);
             }
             case COOKED_BERRY -> {
+                assert c != null;
                 c.setHp((int) c.getHp() + 1);
                 c.setHunger((int) c.getHunger() + 10);
             }
             case COOKED_CARROT -> {
+                assert c != null;
                 c.setHp((int) c.getHp() + 3);
                 c.setHunger((int) c.getHunger() + 10);
             }

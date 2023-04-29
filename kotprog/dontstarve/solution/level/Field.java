@@ -100,26 +100,23 @@ public class Field implements BaseField {
 
     //Csökkenti a mező értékét, ha elfogy az élete akkor áralakítja üres mezővé és az itemek közé adja az itemeket
     //false ha nem lett az életerő 0
-    public void gather() {
+    public boolean gather() {
         if (health != 0) {
             health--;
         }
 
         if (health == 0) {
             if (hasTree()) {
-                items.add(new ItemLog(1));
+                items.add(new ItemLog(2));
             } else if (hasStone()) {
-                items.add(new ItemStone(1));
-            } else if (hasTwig()) {
-                items.add(new ItemTwig(1));
-            } else if (hasBerry()) {
-                items.add(new ItemRawBerry(1));
-            } else if (hasCarrot()) {
-                items.add(new ItemRawCarrot(1));
+                items.add(new ItemStone(3));
             }
 
             hex = "#32C832";
+            return true;
         }
+
+        return false;
     }
 
 }

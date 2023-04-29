@@ -79,7 +79,7 @@ public class Main {
 
         //1.test
         try {
-            Level level = new Level(System.getProperty("user.dir") + "\\kotprog\\dontstarve\\solution\\" + "level01.png");
+            Level level = new Level(System.getProperty("user.dir") + "\\kotprog\\dontstarve\\solution\\" + "level00.png");
             GameManager.getInstance().loadLevel(level);
             System.out.println("✓ 1. Level loaded successfully");
         } catch (Exception exception) {
@@ -119,7 +119,7 @@ public class Main {
             System.out.println(ex);
         }
 
-        System.out.println("x0 y7 walakble: " + GameManager.getInstance().getField(0,6).hasTree());
+        System.out.println("x0 y7 walakble: " + GameManager.getInstance().getField(0, 6).hasTree());
 
     }
 

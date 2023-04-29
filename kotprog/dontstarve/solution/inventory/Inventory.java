@@ -8,6 +8,7 @@ import prog1.kotprog.dontstarve.solution.level.Field;
 import prog1.kotprog.dontstarve.solution.utility.Position;
 
 import java.nio.file.attribute.AttributeView;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -345,5 +346,26 @@ public class Inventory implements BaseInventory {
 
     public void setCharacterName(String characterName) {
         this.characterName = characterName;
+    }
+
+    public boolean hasEnoughItemType(ItemType itemType, int amount) {
+        int db = 0;
+        for (AbstractItem item : inventory) {
+            if (item != null) {
+                if (item.getType().equals(itemType)) {
+                    db += item.getAmount();
+                }
+            }
+        }
+        return amount <= db;
+    }
+
+    public boolean hasItems(ArrayList<AbstractItem> items) {
+        for (AbstractItem item : items) {
+            if (!hasEnoughItemType(item.getType(), item.getAmount())) {
+                return false;
+            }
+        }
+        return true;
     }
 }
