@@ -39,9 +39,9 @@ public class Character implements BaseCharacter {
 
         if (this.hunger >= 50) {
             speed *= 1.0F;
-        } else if (this.health >= 20) {
+        } else if (this.hunger >= 20) {
             speed *= 0.9F;
-        } else if (this.health > 0) {
+        } else if (this.hunger > 0) {
             speed *= 0.8F;
         } else {
             speed *= 0.5F;
@@ -99,4 +99,5 @@ public class Character implements BaseCharacter {
     public boolean isPlayer() {
         return player;
     }
+
 }

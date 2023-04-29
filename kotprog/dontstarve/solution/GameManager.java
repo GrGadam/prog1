@@ -4,6 +4,7 @@ import prog1.kotprog.dontstarve.solution.character.BaseCharacter;
 import prog1.kotprog.dontstarve.solution.character.Character;
 import prog1.kotprog.dontstarve.solution.character.actions.Action;
 import prog1.kotprog.dontstarve.solution.character.actions.ActionManager;
+import prog1.kotprog.dontstarve.solution.inventory.Inventory;
 import prog1.kotprog.dontstarve.solution.inventory.items.*;
 import prog1.kotprog.dontstarve.solution.level.BaseField;
 import prog1.kotprog.dontstarve.solution.level.Field;
@@ -297,21 +298,39 @@ public final class GameManager {
         if (gameStarted && !gameEnded) {
             //player
             if (hasPlayer) {
-                if (Objects.requireNonNull(getPlayer()).getHunger() >= 0.4) {
-                    getPlayer().setHunger(getPlayer().getHunger() - 0.4f);
-                }
-
-                ActionManager actionManager = new ActionManager(action, getPlayer().getName());
-                actionManager.start();
-
-                if (getPlayer().getHunger() == 0) {
-                    getPlayer().setHp((getPlayer().getHp() - 5));
+                if (Objects.requireNonNull(getPlayer()).getHp() > 0) {
+                    ActionManager actionManager = new ActionManager(action, Objects.requireNonNull(getPlayer()).getName());
+                    actionManager.start();
                 }
             }
 
             //bots
             if (!tutorial) {
 
+            }
+
+            //HP, Hunger, Fire, Torch lekezelése
+            for (Character character : characters) {
+                //ha Hunger >= 0.4 akkor még le tudjuk vooni
+                if (character.getHunger() >= 0.4) {
+                    //Ha Hunger > 100 akkor levonjuk majd 100-ra állítjuk
+                    character.setHunger(character.getHunger() - 0.4f);
+                    if (character.getHunger() > 100) {
+                        character.setHunger(100);
+                    }
+                    //Ha hunger 0 akkor sebezni kell, ha meg meghal akkor elszórja az itemjeit, amiket törlünk invből is
+                } else if (character.getHunger() == 0) {
+                    if (character.getHp() > 5) {
+                        character.setHp(character.getHp() - 5);
+                    } else if (character.getHp() == 5) {
+                        character.setHp(0);
+                        Position p = character.getCurrentPosition().getNearestWholePosition();
+                        for (AbstractItem item : ((Inventory)character.getInventory()).getItems()) {
+                            ((Field) Objects.requireNonNull(getField((int) p.getX(), (int) p.getY()))).addItem(item);
+                        }
+                        ((Inventory) character.getInventory()).clear();
+                    }
+                }
             }
 
             //idő telése
